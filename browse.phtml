@@ -51,7 +51,7 @@ $col_width = 12 / $columns;
       <?php foreach ($video_rows as $videos) : ?>
         <div class="row pt-4">
           <?php foreach ($videos as $video) : ?>
-            <div class="col-<?= $col_width ?> video">
+            <div class="col-md-<?= $col_width ?> video">
               <?php $this->repeatingBlock('video.phtml', array($video)); ?>
             </div>
           <?php endforeach; ?>
