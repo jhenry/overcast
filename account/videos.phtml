@@ -27,7 +27,7 @@ $video_rows = array_chunk($userVideos, $columns);
                     <br> <span class="h5">Processing<?= Language::getText($video->status) ?></span>
                   </p>
                 <?php else : ?>
-                  <img class="video-card-thumb" alt="" src="<?= getVideoThumbnail($video); ?>" />
+                  <img class="video-card-thumb" alt="" src="<?= getVideoThumbUrl($video); ?>" />
                 <?php endif; ?>
               </div>
                 <?php if (!isVideoPending($video->status)) : ?>
