@@ -7,7 +7,7 @@ $videoService = $this->getService('Video');
 <div class="card mb-4 shadow-sm">
   <a class="card-thumb-link" href="<?= $videoService->getUrl($video) ?>/">
     <div class="video-card-img-container d-flex bg-dark justify-content-center mr-2">
-      <img class="video-card-thumb" alt="" src="<?= $config->thumbUrl ?>/<?= $video->filename ?>.jpg" />
+      <img class="video-card-thumb" alt="" src="<?= getVideoThumbUrl($video) ?>" />
     </div>
     <small class="duration bg-dark text-light px-1" aria-label="<?= durationInWords($video->duration); ?>"><?= $video->duration ?></small>
   </a>
