@@ -49,13 +49,13 @@ $video_rows = array_chunk($userVideos, $columns);
             <div class="card-footer button-actions text-right">
               <div class="btn-group btn-group-sm">
                 <a class="btn btn-outline-primary" href="<?= HOST ?>/account/videos/edit/<?= $video->videoId ?>/"><?= Language::getText('edit_video') ?></a>
-                <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#confirmDeletion">
+                <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#confirmDeletion-<?= $video->videoId ?>">
                   <?= Language::getText('delete_video') ?>
                 </button>
               </div>
             </div>
             <!-- Begin Confirm Delete Modal -->
-            <div class="modal fade" id="confirmDeletion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal fade" id="confirmDeletion-<?= $video->videoId ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
               <div class="modal-dialog" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
