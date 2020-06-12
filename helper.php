@@ -36,7 +36,7 @@ function getCommentIndentClass(Comment $comment)
  */
 function getUserProfileLink(User $user)
 {
-    return HOST . '/members/' . $user->username;
+    return BASE_URL . '/members/' . $user->username;
 }
 
 /**
@@ -60,15 +60,37 @@ function getPlaylistThumbnail(Playlist $playlist)
 function getVideoThumbUrl(Video $video)
 {
     $config = Registry::get('config');
+    $url = $config->thumbUrl . $video->filename . ".jpg";
 
     if( class_exists('CustomThumbs') ){
         $url = CustomThumbs::thumb_url($video->videoId);
     }
     else {
-        $url = $config->thumbUrl . "/" . $video->filename . ".jpg";
+	if( class_exists( 'Wowza' ) ){
+		$thumb_dir = Wowza::get_url_by_video_id($video->videoId, 'thumbs');
+		$url = $thumb_dir . $video->filename . ".jpg";
+	}
     }
 
     return $url;
+}
+
+/**
+ * Retrieves full URL to a video asset 
+ * @param Video $video The video object to retrieve the video URL for
+ * @return string URL to the a video
+ */
+function getH264Url(Video $video)
+{
+    $config = Registry::get('config');
+    $url = $config->h264Url . $video->filename . ".mp4";
+	
+    if( class_exists( 'Wowza' ) ){
+	    $dir = Wowza::get_url_by_video_id($video->videoId, 'h264');
+	    $url = $dir . $video->filename . ".mp4";
+    }
+    return $url;
+	
 }
 
 function watchLaterButton($video, $loggedInUser, $linkText = '')
@@ -197,16 +219,6 @@ function isVideoPending($status)
 	else return false;
 }
 
-/**
- * Retrieves full URL to an image to be used as the given video thumbnail
- * @param Video $video The video to retrieve thumbnail image for
- * @return string Returns URL to the thumbnail for a video
- */
-function getVideoThumbnail(Video $video)
-{
-	$config = Registry::get('config');
-	return $config->thumbUrl . '/' . $video->filename . '.jpg';
-}
 
 function isInPlaylist($video, $playlist)
 {
