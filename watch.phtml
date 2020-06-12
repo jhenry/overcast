@@ -27,7 +27,7 @@ $this->addJs($this->options->themeUrl . '/js/last.js');
 
 
     <div class="row pt-5">
-        <div class="col-md-8">
+        <div id="video-col" class="col-md-8">
             <div class="header-secondary">
                 <h1 class="video-title"><?php echo htmlspecialchars($video->title); ?></h1>
                 <?php (isset($message)) ? showAlertMessage($message, $message_type) : ''; ?>
