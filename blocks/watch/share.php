@@ -78,6 +78,8 @@
 					<a href="mailto:?subject=<?= $video->title ?>&body=<?= urlencode($this->getService('Video')->getUrl($video) . '/') ?>"><i class="fas fa-envelope-square"></i> Email</a>
 				</li>
 			</ul>
+
+			<?php Plugin::triggerEvent('watch.share', $video); ?>
 		</div>
 	</div>
 </div>
