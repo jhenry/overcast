@@ -129,8 +129,10 @@ function isRated($video, $loggedInUser) {
     $liked = false;
     $ratingMapper = new RatingMapper();
     $usersLikes = $ratingMapper->getRatingByCustom(array('video_id' => $video->videoId, 'user_id' => $loggedInUser->userId, 'rating' => 1));
-    if (count(get_object_vars($usersLikes))) {
-        $liked = true;
+    if($usersLikes) {
+	    if (count(get_object_vars($usersLikes))) {
+		    $liked = true;
+	    }
     }
     return $liked;
 }

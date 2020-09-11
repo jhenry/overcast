@@ -62,7 +62,8 @@
            </div>
         </div>
       <div class="row">
-<?php $more_features = array_slice($featured, 3, 3);?>
+    <?php if($featured_videos): ?>
+	<?php $more_features = array_slice($featured, 3, 3);?>
         <?php foreach ($more_features as $featuredVideo): ?>
 
         <div class="col-md-4">
@@ -70,6 +71,12 @@
         </div>
 
         <?php endforeach; ?>
+        <?php else: ?>
+        <div class="col-md-4">
+		<p>No featured videos yet - upload some videos, <a href="<?=BASE_URL?>/cc-admin/videos.php" class="">then feature them!</a>
+	</p>
+        </div>
+        <?php endif; ?>
 
     </div>
       <div class="row">
