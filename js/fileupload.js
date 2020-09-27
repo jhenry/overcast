@@ -90,7 +90,7 @@ cumulusClips.uploaderOptions = {
             var allowedExtensions = $.parseJSON(decodeURIComponent($(this).data('extensions')));
             var matches = selectedFile.name.match(/\.[a-z0-9]+$/i);
             if (!matches || $.inArray(matches[0].substr(1).toLowerCase(), allowedExtensions) === -1) {
-                displayMessage(false, cumulusClips.errorFormat);
+                cc.displayMessage(false, cumulusClips.errorFormat, '.upload-banner');
                 window.scrollTo(0, 0);
                 return false;
             }
@@ -98,7 +98,7 @@ cumulusClips.uploaderOptions = {
 
         // Validate filesize
         if (selectedFile.size > filesizeLimit) {
-            displayMessage(false, cumulusClips.errorSize);
+            cc.displayMessage(false, cumulusClips.errorSize, '.upload-banner');
             window.scrollTo(0, 0);
             return false;
         }
@@ -151,7 +151,7 @@ cumulusClips.uploaderOptions = {
             // HTTP upload failed/handler rejected upload
             $(this).trigger('uploadfailed');
             resetProgress($uploadWidget);
-            displayMessage(false, cumulusClips.errorGeneral);
+            cc.displayMessage(false, cumulusClips.errorGeneral, '.upload-banner');
             window.scrollTo(0, 0);
         }
     },
@@ -183,7 +183,7 @@ cumulusClips.uploaderOptions = {
 
         } else {
             resetProgress($uploadWidget);
-            displayMessage(false, data.result.message);
+            cc.displayMessage(false, data.result.message, '.upload-banner');
             window.scrollTo(0, 0);
         }
 
