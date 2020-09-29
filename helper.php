@@ -60,16 +60,17 @@ function getPlaylistThumbnail(Playlist $playlist)
 function getVideoThumbUrl(Video $video)
 {
     $config = Registry::get('config');
-    $url = $config->thumbUrl . $video->filename . ".jpg";
+    $extension = (isAudio) ? ".png" : ".jpg";
+    $url = $config->thumbUrl . '/' . $video->filename . $extension;
 
     if( class_exists('CustomThumbs') ){
         $url = CustomThumbs::thumb_url($video->videoId);
     }
     else {
-	if( class_exists( 'Wowza' ) ){
-		$thumb_dir = Wowza::get_url_by_video_id($video->videoId, 'thumbs');
-		$url = $thumb_dir . $video->filename . ".jpg";
-	}
+        if (class_exists('Wowza')) {
+            $thumb_dir = Wowza::get_url_by_video_id($video->videoId, 'thumbs');
+            $url = $thumb_dir . $video->filename . $extension;
+        }
     }
 
     return $url;
@@ -80,17 +81,37 @@ function getVideoThumbUrl(Video $video)
  * @param Video $video The video object to retrieve the video URL for
  * @return string URL to the a video
  */
-function getH264Url(Video $video)
+function getMediaUrl(Video $video)
 {
     $config = Registry::get('config');
-    $url = $config->h264Url . $video->filename . ".mp4";
-	
+    $url = $config->h264Url . "/" . $video->filename . ".mp4";
+    if( isAudio($video) ) 
+    {
+            $url = $config->mp3Url . "/" . $video->filename . ".mp3";
+    }	
     if( class_exists( 'Wowza' ) ){
-	    $dir = Wowza::get_url_by_video_id($video->videoId, 'h264');
-	    $url = $dir . $video->filename . ".mp4";
+        if( isAudio($video) ) {
+            $dir = Wowza::get_url_by_video_id($video->videoId, 'mp3');
+            $url = $dir . $video->filename . ".mp3";
+        } else {
+            $dir = Wowza::get_url_by_video_id($video->videoId, 'h264');
+            $url = $dir . $video->filename . ".mp4";
+        }
     }
     return $url;
 	
+}
+/**
+ * Checks to see if this is an audio file and that audio is allowed.
+ * @param Video $video The video object to inspect.
+ * @return bool True if audio's allowed and it's an audio file.
+ */
+function isAudio(Video $video) {
+        if( class_exists( 'EnableAudio' ) && $video->originalExtension == 'mp3' ) {
+            return true;
+        }
+
+        return false;
 }
 
 function watchLaterButton($video, $loggedInUser, $linkText = '')

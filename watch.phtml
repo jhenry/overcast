@@ -48,7 +48,7 @@ $this->addJs($this->options->themeUrl . '/js/last.js');
                 <!-- BEGIN VIDEO -->
                 <div id="player" class="mb-1">
                     <video class="video-js vjs-big-play-centered" controls preload="auto" data-setup='{ "autoplay": false, "fluid": true, "aspectRatio": "16:9"}' poster="<?= getVideoThumbUrl($video) ?>">
-                        <source src="<?= getH264Url($video) ?>" type="video/mp4" />
+                        <source src="<?= getMediaUrl($video) ?>" type="video/mp4" />
                         <?php if ($webmEncodingEnabled) : ?>
                             <source src="<?= $config->webmUrl ?>/<?= $video->filename ?>.webm" type="video/webm" />
                         <?php endif; ?>
