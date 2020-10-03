@@ -60,7 +60,7 @@ function getPlaylistThumbnail(Playlist $playlist)
 function getVideoThumbUrl(Video $video)
 {
     $config = Registry::get('config');
-    $extension = (isAudio) ? ".png" : ".jpg";
+    $extension = (isAudio($video)) ? ".png" : ".jpg";
     $url = $config->thumbUrl . '/' . $video->filename . $extension;
 
     if( class_exists('CustomThumbs') ){
