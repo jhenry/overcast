@@ -85,12 +85,13 @@ function getMediaUrl(Video $video)
 {
     $config = Registry::get('config');
     $url = $config->h264Url . "/" . $video->filename . ".mp4";
-    if( isAudio($video) ) 
+    $isMp3 = ($video->originalExtension == ".mp3") ? true : false;
+    if( isAudio($video) && $isMp3 ) 
     {
-            $url = $config->mp3Url . "/" . $video->filename . ".mp3";
+        $url = $config->mp3Url . "/" . $video->filename . ".mp3";
     }	
     if( class_exists( 'Wowza' ) ){
-        if( isAudio($video) ) {
+        if( isAudio($video) && $isMp3 ) {
             $dir = Wowza::get_url_by_video_id($video->videoId, 'mp3');
             $url = $dir . $video->filename . ".mp3";
         } else {
@@ -101,17 +102,21 @@ function getMediaUrl(Video $video)
     return $url;
 	
 }
+
 /**
  * Checks to see if this is an audio file and that audio is allowed.
  * @param Video $video The video object to inspect.
  * @return bool True if audio's allowed and it's an audio file.
  */
-function isAudio(Video $video) {
-        if( class_exists( 'EnableAudio' ) && $video->originalExtension == 'mp3' ) {
+function isAudio(Video $video) 
+{
+    if( class_exists( 'EnableAudio' ) ) {
+        $audioFormats = json_decode(Settings::get('enable_audio_formats'));
+        if( in_array($video->originalExtension, $audioFormats) ) {
             return true;
         }
-
-        return false;
+    }
+    return false;
 }
 
 function watchLaterButton($video, $loggedInUser, $linkText = '')
