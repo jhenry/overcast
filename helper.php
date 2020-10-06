@@ -75,6 +75,20 @@ function getVideoThumbUrl(Video $video)
 
     return $url;
 }
+/**
+ * Generates SMIL source elements
+ * @param Video $video The video object to retrieve the video URL for
+ * @return string HTML elements for theSMIL urls.
+ */
+function getSmilSources(Video $video)
+{
+	$url = Wowza::getSmilUrl($video);
+	$mpd = $url . "manifest.mpd";
+	$hls = $url . "playlist.m3u8";
+	$source = '<source src="' . $mpd . '" type="application/dash+xml">';
+	$source .= '<source src="' . $hls . '" type="application/x-mpegURL">';
+	return $source;
+}
 
 /**
  * Retrieves full URL to a video asset 
@@ -101,6 +115,22 @@ function getMediaUrl(Video $video)
     }
     return $url;
 	
+}
+
+/**
+ * Check for existence of SMIL file for this video.
+ * @param Video $video The video object to inspect.
+ * @return bool True if SMIL file exists.
+ */
+function smilFileExists(Video $video) 
+{
+	if( class_exists( 'Wowza' ) )
+	{
+		$dir = Wowza::get_video_owner_homedir($video->videoId);
+		$exists = file_exists($dir . "/" . $video->filename . ".smil");
+		return $exists;
+	}	
+	return false;
 }
 
 /**
