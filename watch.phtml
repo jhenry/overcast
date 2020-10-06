@@ -47,7 +47,7 @@ $this->addJs($this->options->themeUrl . '/js/last.js');
             <?php else : ?>
                 <!-- BEGIN VIDEO -->
                 <div id="player" class="mb-1">
-                    <video class="video-js vjs-big-play-centered" controls preload="auto" data-setup='{ "autoplay": false, "fluid": true, "aspectRatio": "16:9"}' poster="<?= getVideoThumbUrl($video) ?>">
+                    <video class="video-js vjs-big-play-centered" controls preload="auto" data-setup='{ "autoplay": false, "fluid": true, "aspectRatio": "16:9", "playbackRates": [0.5, 1, 1.5, 2, 2.5]}' poster="<?= getVideoThumbUrl($video) ?>">
                         <?php if (smilFileExists($video)) : ?>
 				<source src="<?= getMediaUrl($video) ?>" type="video/mp4" />
                         <?php else: ?>
