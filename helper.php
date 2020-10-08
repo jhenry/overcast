@@ -75,18 +75,37 @@ function getVideoThumbUrl(Video $video)
 
     return $url;
 }
+
+/**
+ * Check for JWPlayer support
+ * @return bool True if jwplayer is set in plugin settings
+ * TODO: Settings check
+ */
+function useJWPlayer()
+{
+	return true;
+}
+
 /**
  * Generates SMIL source elements
  * @param Video $video The video object to retrieve the video URL for
+ * @param bool $json toggle for return of json or html element format 
  * @return string HTML elements for theSMIL urls.
  */
-function getSmilSources(Video $video)
+function getSmilSources(Video $video, $json=false)
 {
 	$url = Wowza::getSmilUrl($video);
 	$mpd = $url . "manifest.mpd";
 	$hls = $url . "playlist.m3u8";
-	$source = '<source src="' . $mpd . '" type="application/dash+xml">';
-	$source .= '<source src="' . $hls . '" type="application/x-mpegURL">';
+	if($json) 
+	{
+		$source = '{file: "' . $mpd . '"},';  
+		$source .= '{file: "' . $hls . '"}';  
+
+	} else {
+		$source = '<source src="' . $mpd . '" type="application/dash+xml">';
+		$source .= '<source src="' . $hls . '" type="application/x-mpegURL">';
+	}
 	return $source;
 }
 

@@ -9,11 +9,16 @@ $this->addMeta('report_abuse', Language::getText('report_abuse'));
 if ($loggedInUser && !$video->commentsClosed) {
     $this->addMeta('reply', Language::getText('reply'));
 }
-$this->addCss($this->options->themeUrl . '/css/vendor/video-js.css');
-$this->addJs($this->options->themeUrl . '/js/vendor/video.min.js');
 
-$this->addCss($this->options->themeUrl . '/css/vendor/videojs.theaterMode.css');
-$this->addJs($this->options->themeUrl . '/js/vendor/videojs.theaterMode.js');
+$useJWPlayer = useJWPlayer();
+if( !$useJWPlayer ) 
+{
+	$this->addCss($this->options->themeUrl . '/css/vendor/video-js.css');
+	$this->addJs($this->options->themeUrl . '/js/vendor/video.min.js');
+
+	$this->addCss($this->options->themeUrl . '/css/vendor/videojs.theaterMode.css');
+	$this->addJs($this->options->themeUrl . '/js/vendor/videojs.theaterMode.js');
+}
 //$this->addJs($this->options->themeUrl . '/js/general.js');
 
 $this->addJs($this->options->themeUrl . '/js/vendor/moment.min.js');
@@ -47,6 +52,18 @@ $this->addJs($this->options->themeUrl . '/js/last.js');
             <?php else : ?>
                 <!-- BEGIN VIDEO -->
                 <div id="player" class="mb-1">
+		<?php if( $useJWPlayer ) : ?>
+		<div id="jwplayer"></div>
+
+		<script type="text/JavaScript">
+		    jwplayer("jwplayer").setup({ 
+			"playlist": [{
+				"image": "<?= getVideoThumbUrl($video) ?>",
+				"sources": [<?= getSmilSources($video, true); ?>]
+			}]
+		    });
+		</script>
+		<?php else: ?>
                     <video class="video-js vjs-big-play-centered" controls preload="auto" data-setup='{ "autoplay": false, "fluid": true, "aspectRatio": "16:9", "playbackRates": [0.5, 1, 1.5, 2, 2.5]}' poster="<?= getVideoThumbUrl($video) ?>">
                         <?php if (smilFileExists($video)) : ?>
 				<source src="<?= getMediaUrl($video) ?>" type="video/mp4" />
@@ -61,6 +78,7 @@ $this->addJs($this->options->themeUrl . '/js/last.js');
                             <source src="<?= $config->theoraUrl ?>/<?= $video->filename ?>.ogg" type="video/ogg" />
                         <?php endif; ?>
                     </video>
+		<?php endif; ?>
                 </div>
                 <!-- END VIDEO -->
             <?php endif; ?>
