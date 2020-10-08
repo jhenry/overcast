@@ -79,11 +79,16 @@ function getVideoThumbUrl(Video $video)
 /**
  * Check for JWPlayer support
  * @return bool True if jwplayer is set in plugin settings
- * TODO: Settings check
  */
 function useJWPlayer()
 {
-	return true;
+    if( class_exists( 'AdminPlus' ) ){
+	$enabled = Settings::get('adminplus_jwplayer_enabled');
+	if( $enabled ){
+		return true;
+	}
+    }
+    return false;
 }
 
 /**
