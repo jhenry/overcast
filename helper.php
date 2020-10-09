@@ -92,6 +92,36 @@ function useJWPlayer()
 }
 
 /**
+ * Return default gated flag for AdminPlus configuration setting. 
+ * @return bool True if videos are set to be gated by default
+ */
+function gatedByDefault()
+{
+    if( class_exists( 'AdminPlus' ) ){
+	$set = Settings::get('adminplus_gated_default');
+	if( $set ){
+		return true;
+	}
+    }
+    return false;
+}
+
+/**
+ * Return default privacy flag for AdminPlus configuration setting. 
+ * @return bool True if videos are set to be private by default
+ */
+function privateByDefault()
+{
+    if( class_exists( 'AdminPlus' ) ){
+	$set = Settings::get('adminplus_private_default');
+	if( $set ){
+		return true;
+	}
+    }
+    return false;
+}
+
+/**
  * Generates SMIL source elements
  * @param Video $video The video object to retrieve the video URL for
  * @param bool $json toggle for return of json or html element format 
