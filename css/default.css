@@ -91,3 +91,8 @@
 	min-height: 224px;
 	color: gray;
 }
+
+.attachments i.playlist-mini-thumb {
+	font-size: 55px;
+	color: darkgray;
+}

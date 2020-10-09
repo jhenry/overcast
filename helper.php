@@ -316,13 +316,40 @@ function attachmentItem($fileInfo, $attachmentCount, $isNew)
                         <input type="hidden" name="attachment[' . $attachmentCount . '][size]" value="' . $fileInfo['size'] . '" />
                         <input type="hidden" name="attachment[' . $attachmentCount . '][' . $file . ']" value="' . $fileInfo[$file] . '" />
 
-                        <div class="upload-ready">
+                        <!-- <div class="upload-ready">
 				<p><span class="filename-attached">' . $fileInfo['name'] . ' (' . \Functions::formatBytes($fileInfo['size'],0) . ')</span><a class="float-right btn btn-sm btn-outline-danger remove" href="#" role="button">Remove</a></p>
-                        </div>';
+                        </div> -->';
 
 	return $attachedItem;
 }
+/**
+ * Show attachment image/icon
+ * @param int $fileId id of the file attachment
+ * @return 
+ *
+ **/
+function attachmentIcon($fileId)
+{
+    $fileMapper = new FileMapper();
+    $file = $fileMapper->getById($fileId);
+    $ext = $file->extension;
+    $config = Registry::get('config');
 
+    $img = '<i class="playlist-mini-thumb pt-3 fas fa-file-alt"></i>';
+    // Check if the extension matches an image type 
+    if (in_array($ext, $config->acceptedImageFormats)) {
+        $fileService = new FileService();
+        $image_url = $fileService->getURL($file);
+        $img = '<img class="playlist-mini-thumb" src="' . $image_url. '" alt="">';
+    }
+    if (class_exists('AttachCaptions')) {
+        if (in_array($ext, $config->allowedCaptionFormats)) {
+            $img = '<i class="playlist-mini-thumb pt-3 fas fa-closed-captioning"></i>';
+        }
+    }
+    return $img;
+
+} 
 /**
  * Get video processing/approval status
  * @param string $status Flag for status state of the video.
