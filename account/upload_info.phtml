@@ -22,10 +22,10 @@ $this->setLayout('account');
           <h4 class="text-white bg-secondary p-2" id="basic-information"><?php echo Language::getText('video_basic_tab_header'); ?></h4>
 
           <label for="title"><?=Language::getText('title')?></label>
-          <input type="text" class="form-control <?=(isset ($Errors['title'])) ? ' is-invalid' : ''?>" name="title" id="title" placeholder="<?=Language::getText('title')?>" value="<?=(!empty($video->title)) ? $video->title : ''?>">
+          <input type="text" class="form-control <?=(isset ($errors['title'])) ? ' is-invalid' : ''?>" name="title" id="title" placeholder="<?=Language::getText('title')?>" value="<?=(!empty($video->title)) ? $video->title : ''?>">
 
-          <label class="<?=(isset($errors['description'])) ? 'error' : ''?>" for="description"><?=Language::getText('description')?></label>
-          <textarea name="description" class="form-control" id="description" rows="3" cols="100"><?=(!empty($video->description)) ? $video->description : ''?></textarea>
+          <label for="description"><?=Language::getText('description')?></label>
+          <textarea name="description" class="form-control<?=(isset($errors['description'])) ? ' is-invalid' : ''?>" id="description" rows="3" cols="100"><?=(!empty($video->description)) ? $video->description : ''?></textarea>
 
           <label for="tags"><?=Language::getText('tags')?></label>
           <input type="text" class="form-control <?=(isset ($errors['tags'])) ? ' is-invalid' : ''?>" name="tags" id="tags" placeholder="i.e. a, comma, separated, list, of, tags" value="<?=(!empty($video->tags)) ? implode(', ', $video->tags) : ''?>">
