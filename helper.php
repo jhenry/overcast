@@ -92,43 +92,30 @@ function useJWPlayer()
 }
 
 /**
- * Return default gated flag for AdminPlus configuration setting. 
- * @return bool True if videos are set to be gated by default
+ * Return default flag for AdminPlus configuration setting. 
+ * @return bool True if videos are set to this by default in plugin settings.
  */
-function gatedByDefault()
+function isSetByDefault($field)
 {
-    if( class_exists( 'AdminPlus' ) ){
-	$set = Settings::get('adminplus_gated_default');
-	if( $set ){
-		return true;
-	}
-    }
-    return false;
-}
-
-/**
- * Return default privacy flag for AdminPlus configuration setting. 
- * @return bool True if videos are set to be private by default
- */
-function privateByDefault()
-{
-    // If the form has been posted, preserve the selected state 
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        if (!isset($_POST['private'])) {
+   // If the form has been posted, preserve the selected state 
+   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if (!isset($_POST[$field])) {
             return false;
         }
-        if (isset($_POST['private'])) {
+        if (isset($_POST[$field])) {
             return true;
         }
     }
 
+
+    $setting = 'adminplus_' . $field . '_default';
     if (class_exists('AdminPlus')) {
-        $set = Settings::get('adminplus_private_default');
+        $set = Settings::get($setting);
         if ($set) {
             return true;
         }
     }
-    return false;
+    return false; 
 }
 
 /**

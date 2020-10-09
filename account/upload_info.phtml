@@ -52,16 +52,16 @@ $this->setLayout('account');
 
               <li class="list-group-item">
                 <div class="custom-control custom-switch">
-                  <input type="checkbox" class="custom-control-input" value="1" id="gated" name="gated" <?=(!empty($video->gated)) ? 'checked="checked"' : ''?>>
+                  <input type="checkbox" class="custom-control-input" value="1" id="gated" name="gated"<?=(isSetByDefault('gated')) ? ' checked' : ''?>>
                   <label class="custom-control-label" for="gated"><?=Language::getText('gated')?></label> (<?=Language::getText('gated_description')?>)
                 </div>
               </li>
 
               <li class="list-group-item">
                 <div class="custom-control custom-switch">
-                  <input type="checkbox" class="custom-control-input" value="1" id="private_video" data-block="private_url" name="private"<?=(privateByDefault()) ? ' checked' : ''?> data-toggle="collapse" data-target="#showPrivateLink" aria-expanded="false" aria-controls="showPrivateLink">
+                  <input type="checkbox" class="custom-control-input" value="1" id="private_video" data-block="private_url" name="private"<?=(isSetByDefault('private')) ? ' checked' : ''?> data-toggle="collapse" data-target="#showPrivateLink" aria-expanded="false" aria-controls="showPrivateLink">
                   <label class="custom-control-label" for="private_video"><?=Language::getText('private')?></label> (<?=Language::getText('private_description')?>)
-                  <div id="showPrivateLink" class="collapse<?=(privateByDefault()) ? ' show' : ''?>" aria-labelledby="private_video">
+                  <div id="showPrivateLink" class="collapse<?=(isSetByDefault('private')) ? ' show' : ''?>" aria-labelledby="private_video">
                     <label class="<?=(isset($errors['private_url'])) ? 'error' : ''?>"><?=Language::getText('private_url')?>:</label><br />
                     <input class="form-control" type="text" id="privateLink" value="<?=HOST?>/private/videos/<?=(!empty($video->privateUrl)) ? $video->privateUrl : $privateUrl?>/" readonly>
                     <input type="hidden" id="private_url" name="private_url" value="<?=(!empty($video->privateUrl)) ? $video->privateUrl : $privateUrl?>" />
