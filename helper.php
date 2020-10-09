@@ -126,19 +126,28 @@ function isSetByDefault($field)
  */
 function getSmilSources(Video $video, $json=false)
 {
-	$url = Wowza::getSmilUrl($video);
-	$mpd = $url . "manifest.mpd";
-	$hls = $url . "playlist.m3u8";
-	if($json) 
-	{
-		$source = '{file: "' . $mpd . '"},';  
-		$source .= '{file: "' . $hls . '"}';  
-
-	} else {
-		$source = '<source src="' . $mpd . '" type="application/dash+xml">';
-		$source .= '<source src="' . $hls . '" type="application/x-mpegURL">';
-	}
-	return $source;
+    if( class_exists( 'Wowza' ) )
+    {
+        $url = Wowza::getSmilUrl($video);
+        $mpd = $url . "manifest.mpd";
+        $hls = $url . "playlist.m3u8";
+        if ($json) {
+            $source = '{file: "' . $mpd . '"},';
+            $source .= '{file: "' . $hls . '"}';
+        } else {
+            $source = '<source src="' . $mpd . '" type="application/dash+xml">';
+            $source .= '<source src="' . $hls . '" type="application/x-mpegURL">';
+        }
+    }
+    else {
+        $url = getMediaUrl($video);
+        if ($json) {
+            $source = '{file: "' . $url . '"}'; 
+        } else {
+            $source = '<source src="' . $url . '" type="video/mp4">';
+        }
+    }
+    return $source;
 }
 
 /**
