@@ -112,11 +112,21 @@ function gatedByDefault()
  */
 function privateByDefault()
 {
-    if( class_exists( 'AdminPlus' ) ){
-	$set = Settings::get('adminplus_private_default');
-	if( $set ){
-		return true;
-	}
+    // If the form has been posted, preserve the selected state 
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if (!isset($_POST['private'])) {
+            return false;
+        }
+        if (isset($_POST['private'])) {
+            return true;
+        }
+    }
+
+    if (class_exists('AdminPlus')) {
+        $set = Settings::get('adminplus_private_default');
+        if ($set) {
+            return true;
+        }
     }
     return false;
 }
