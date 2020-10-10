@@ -311,14 +311,10 @@ function attachmentItem($fileInfo, $attachmentCount, $isNew)
 		$file = "file";
 	}
 
-	$attachedItem = '
-                        <input type="hidden" name="attachment[' . $attachmentCount . '][name]" value="' . $fileInfo['name'] . '" />
+	$attachedItem = '   <input type="hidden" name="attachment[' . $attachmentCount . '][name]" value="' . $fileInfo['name'] . '" />
                         <input type="hidden" name="attachment[' . $attachmentCount . '][size]" value="' . $fileInfo['size'] . '" />
                         <input type="hidden" name="attachment[' . $attachmentCount . '][' . $file . ']" value="' . $fileInfo[$file] . '" />
-
-                        <!-- <div class="upload-ready">
-				<p><span class="filename-attached">' . $fileInfo['name'] . ' (' . \Functions::formatBytes($fileInfo['size'],0) . ')</span><a class="float-right btn btn-sm btn-outline-danger remove" href="#" role="button">Remove</a></p>
-                        </div> -->';
+                        ';
 
 	return $attachedItem;
 }

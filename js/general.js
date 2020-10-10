@@ -699,6 +699,19 @@ $(document).ready(function(){
         var index = $('#video-attachments .attachments .attachment').length;
         var $attachment = buildAttachmentCard(index, name, size, fileId);
 
+        // Add image/icon to attachment.
+        const image = $(this).closest('.media').find('.related-thumb-container').html()
+        $attachment.find('.related-thumb-container').prepend($(image))
+
+        // Remove Custom thumb button from non-images.
+        var allowedImagesMeta = $('meta[name=allowedImageFormats]').attr("content");
+        var allowedImages = allowedImagesMeta.split(',')
+        var attachedName = name.split('.')
+        var attachedExt = attachedName[1]
+        if (allowedImages.includes(attachedExt) == false) {
+            $attachment.find('.custom-thumb-toggle').remove()
+        }
+
         // Mark as selected
         $(this).addClass('btn-outline-danger');
         $(this).html('Remove');
@@ -806,16 +819,23 @@ function buildAttachmentCard(index, name, size, file)
     displayFilename += ' (' + formatBytes(size, 0) + ')';
 
     // Build card
-    var $attachment = $('<li class="attachment list-group-item">'
+    var $attachment = $('<li class="attachment media border-top mt-1 py-2">'
 
         // Append form values
+        // TODO: if fieldname is temp, and file is an image, add img tag 
 
-        + '<div class="upload-ready">'
-		+ '<input type="hidden" name="attachment[' + index + '][name]" value="' + name + '" />'
-		+ '<input type="hidden" name="attachment[' + index + '][size]" value="' + size + '" />'
-		+ '<input type="hidden" name="attachment[' + index + '][' + fieldName + ']" value="' + file + '" />'
-		+ '<p><span class="filename-attached">' + displayFilename + '</span><a class="float-right btn btn-sm btn-outline-danger remove" href="#" role="button">Remove</a></p>'
-	+ '</div>'
+        + '<div class="upload-ready d-flex bg-dark justify-content-center mr-2 related-thumb-container">'
+            + '<input type="hidden" name="attachment[' + index + '][name]" value="' + name + '" />'
+            + '<input type="hidden" name="attachment[' + index + '][size]" value="' + size + '" />'
+            + '<input type="hidden" name="attachment[' + index + '][' + fieldName + ']" value="' + file + '" />'
+        + '</div>'
+        + '<div class="media-body">'
+            + '<p class="mt-0 mb-1"><span class="filename-attached">' + displayFilename + '</span><a class="float-right btn btn-sm btn-outline-danger remove" href="#" role="button">Remove</a></p>'
+            + '<div class="pt-2 custom-control custom-radio custom-thumb-toggle">'
+            + '<input type="radio" id="customthumb-' + file + '" name="custom_thumbnail" value="' + file + '" class="custom-control-input">'
+            + '<label class="custom-control-label" for="customthumb-' + file + '">Use as thumbnail/poster.</label>'
+            + '</div>'
+        + '</div>'
 
     + '</li>');
 

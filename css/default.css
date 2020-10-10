@@ -92,7 +92,7 @@
 	color: gray;
 }
 
-.attachments i.playlist-mini-thumb {
+#video-attachments i.playlist-mini-thumb {
 	font-size: 55px;
 	color: darkgray;
 }
