@@ -267,7 +267,20 @@ function videoCardBlock($viewFile, $video)
     extract(get_object_vars($this->vars));
     include($block);
 }
-                
+
+/**
+* Set url for temp directory in meta, to allow thumb display on upload.
+*
+*/
+function getTempDirUrl() {
+    if (class_exists('Wowza')) {
+        $tempDir = Wowza::get_url_by_video_id($video->videoId, 'temp');
+    } else {
+        $tempDir = BASE_URL . '/cc-content/uploads/temp/';
+    }
+    return $tempDir;
+}
+
 /**
  * Set message type class to use bootstrap alert styles
  * @param string $message_type status message passed from controller

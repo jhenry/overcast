@@ -665,6 +665,28 @@ $(document).ready(function(){
         // Append attachment
         $('#video-attachments .attachments').append($attachment);
 
+        // Disable thumbnail button/toggle
+        $attachment.find(".custom-thumb-toggle input[type='radio'][name='custom_thumbnail']").attr('disabled', true)
+
+        // Display image/icon
+        if (attachedFileType(name) == 'image') {
+            const tempFileName = temp.replace(/^.*[\\\/]/, '')
+            const tempDirUrl = $('meta[name=tempDirUrl]').attr("content");
+            const tempUrl = tempDirUrl + tempFileName
+            const imageHTML = '<img class="playlist-mini-thumb" src="' + tempUrl + '" alt="">'
+            $attachment.find('.related-thumb-container').prepend($(imageHTML))
+        }
+        else if (attachedFileType(name) == 'caption') {
+            const ccIconHTML = '<i class="playlist-mini-thumb pt-3 fas fa-closed-captioning"></i>'
+            $attachment.find('.related-thumb-container').prepend($(ccIconHTML)) 
+            $attachment.find('.custom-thumb-toggle').remove()
+        }
+        else {
+            const fileIconHTML = '<i class="playlist-mini-thumb pt-3 fas fa-file-alt"></i>'
+            $attachment.find('.related-thumb-container').prepend($(fileIconHTML)) 
+            $attachment.find('.custom-thumb-toggle').remove()
+        }
+
         // Reset upload form
         resetProgress($uploadWidget);
     });
@@ -704,11 +726,7 @@ $(document).ready(function(){
         $attachment.find('.related-thumb-container').prepend($(image))
 
         // Remove Custom thumb button from non-images.
-        var allowedImagesMeta = $('meta[name=allowedImageFormats]').attr("content");
-        var allowedImages = allowedImagesMeta.split(',')
-        var attachedName = name.split('.')
-        var attachedExt = attachedName[1]
-        if (allowedImages.includes(attachedExt) == false) {
+        if (attachedFileType(name) !== 'image') {
             $attachment.find('.custom-thumb-toggle').remove()
         }
 
@@ -729,6 +747,33 @@ $(document).ready(function(){
 /****************
 GENERAL FUNCTIONS
 ****************/
+
+/**
+ * Determine attachment file type
+ * @param fileName name of file
+ * @return string indicator describing type of file (i.e. 'image', 'caption')
+ */
+function attachedFileType(fileName)
+{
+    const attachedName = fileName.split('.')
+    const attachedExt = attachedName[1]
+
+    const allowedImagesMeta = $('meta[name=allowedImageFormats]').attr("content");
+    if (typeof allowedImagesMeta !== 'undefined') {
+        const allowedImages = allowedImagesMeta.split(',')
+        if (allowedImages.includes(attachedExt) == true) {
+            return 'image'
+        }
+    }
+    const allowedCaptionsMeta = $('meta[name=allowedCaptionFormats]').attr("content");
+    if (typeof allowedCaptionsMeta !== 'undefined') {
+        const allowedCaptions = allowedCaptionsMeta.split(',')
+        if (allowedCaptions.includes(attachedExt) == true) {
+            return 'caption'
+        }
+    }
+    return ''
+}
 
 /**
  * Retrieve localised string via AJAX

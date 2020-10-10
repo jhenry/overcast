@@ -2,6 +2,7 @@
 $this->addJs($this->options->themeUrl . '/js/vendor/jquery.iframe-transport.js');
 $this->addJs($this->options->themeUrl . '/js/vendor/jquery.fileupload.js');
 $this->addMeta('allowedImageFormats', implode($config->acceptedImageFormats, ','));
+$this->addMeta('tempDirUrl', getTempDirUrl());
 $this->addJs('general.js');
 $this->addJs('fileupload.js');
 $this->setLayout('account');
