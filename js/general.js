@@ -735,6 +735,11 @@ $(document).ready(function(){
         if (attachedFileType(name) !== 'image') {
             $attachment.find('.custom-thumb-toggle').remove()
         }
+        // remove Custom thumb toggle if that plugin isn't installed.
+        const customThumbsInstalled = $('meta[name=customthumbs]').attr("content");
+    if (typeof customThumbsInstalled === 'undefined') {
+            $attachment.find('.custom-thumb-toggle').remove()
+        }
 
         // Hide from the list if it's been added.
         $(this).closest('.media').addClass('d-none')
