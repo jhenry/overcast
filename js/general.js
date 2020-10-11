@@ -690,6 +690,12 @@ $(document).ready(function(){
             $attachment.find('.custom-thumb-toggle').remove()
         }
 
+        // remove toggle if that plugin isn't installed.
+        const customThumbsInstalled = $('meta[name=customthumbs]').attr("content");
+        if (typeof customThumbsInstalled === 'undefined') {
+            $attachment.find('.custom-thumb-toggle').remove()
+        }
+
         // Reset upload form
         resetProgress($uploadWidget);
     });
@@ -735,9 +741,10 @@ $(document).ready(function(){
         if (attachedFileType(name) !== 'image') {
             $attachment.find('.custom-thumb-toggle').remove()
         }
-        // remove Custom thumb toggle if that plugin isn't installed.
+
+        // remove toggle if that plugin isn't installed.
         const customThumbsInstalled = $('meta[name=customthumbs]').attr("content");
-    if (typeof customThumbsInstalled === 'undefined') {
+        if (typeof customThumbsInstalled === 'undefined') {
             $attachment.find('.custom-thumb-toggle').remove()
         }
 
