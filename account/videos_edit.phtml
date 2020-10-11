@@ -132,7 +132,9 @@ $this->setLayout('account');
                   <p><?php echo Language::getText('select_existing_attachment_help'); ?></p>
                   <ul class="list-group previous-attachments">
                     <?php foreach ($userAttachments as $file) : ?>
-                      <li class="media border-top mt-1 py-2">
+
+                    
+                      <li class="media border-top mt-1 py-2<?= (in_array($file->fileId, $attachmentFileIds)) ? ' d-none' : ''; ?>">
                     <div class="d-flex bg-dark justify-content-center mr-2 related-thumb-container">
                       <?= attachmentIcon($file->fileId); ?>
                     </div>
@@ -142,6 +144,7 @@ $this->setLayout('account');
                       </p>
                     </div>
                   </li>
+
 
                     <?php endforeach; ?>
                   </ul>

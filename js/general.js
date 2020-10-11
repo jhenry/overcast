@@ -637,6 +637,9 @@ $(document).ready(function(){
             $('#select-existing-file-' + fileId).removeClass('btn-outline-danger');
             $('#select-existing-file-' + fileId).addClass('btn-outline-primary');
             $('#select-existing-file-' + fileId).html('Add');
+
+            // Show attachment in the "previous attachments" area
+            $('.attachment-form-existing').find('#select-existing-file-' + fileId).closest('.media').removeClass('d-none')
         }
 
         $attachment.remove();
@@ -711,7 +714,10 @@ $(document).ready(function(){
             $(this).removeClass('btn-outline-danger');
             $(this).addClass('btn-outline-primary');
             $(this).html('Add');
+            
             $('#existing-file-' + fileId).remove();
+
+
             return;
         }
 
@@ -730,9 +736,12 @@ $(document).ready(function(){
             $attachment.find('.custom-thumb-toggle').remove()
         }
 
+        // Hide from the list if it's been added.
+        $(this).closest('.media').addClass('d-none')
+
         // Mark as selected
-        $(this).addClass('btn-outline-danger');
-        $(this).html('Remove');
+        //$(this).addClass('btn-outline-danger');
+        //$(this).html('Remove');
 
         // Append attachment
         $('#video-attachments .attachments').append($attachment);
