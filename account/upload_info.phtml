@@ -101,7 +101,7 @@ $this->setLayout('account');
                     </div>
                     <div class="media-body">
                       <p class="mt-0 mb-1">
-                        <span class="filename-attached"><?= $newFile['name'] ?> (<?= \Functions::formatBytes($newFile['size'], 0); ?>) </span><a class="float-right btn btn-sm btn-outline-danger remove" href="#" role="button">Remove</a>
+                        <span class="filename-attached"><span class="attachment-file-name"><?= $newFile['name'] ?></span> <span class="attachment-filesize"> (<?= \Functions::formatBytes($newFile['size'], 0); ?>) </span><a class="float-right btn btn-sm btn-outline-danger remove" href="#" role="button">Remove</a>
                         <?php Plugin::triggerEvent('videos.edit.attachment.list', $newFile['temp'], $video->videoId); ?>
                       </p>
                     </div>
@@ -117,7 +117,7 @@ $this->setLayout('account');
                     </div>
                     <div class="media-body">
                       <p class="mt-0 mb-1">
-                        <span class="filename-attached"><?= $file[0]->name ?> (<?= \Functions::formatBytes($file[0]->filesize, 0); ?>) </span><a class="float-right btn btn-sm btn-outline-danger remove" href="#" role="button">Remove</a>
+                        <span class="filename-attached"><span class="attachment-file-name"><?= $file[0]->name ?> </span> <span class="attachment-filesize">(<?= \Functions::formatBytes($file[0]->filesize, 0); ?>) </span><a class="float-right btn btn-sm btn-outline-danger remove" href="#" role="button">Remove</a>
                         <?php Plugin::triggerEvent('videos.edit.attachment.list', $file[0]->fileId, $video->videoId); ?>
                       </p>
                       <?php echo attachmentItem(array("name" => $file[0]->name, "size" => $file[0]->filesize, "file" => $file[0]->fileId), $attachmentCount, false); ?>
@@ -147,7 +147,7 @@ $this->setLayout('account');
                         </div>
                         <div class="media-body">
                           <p class="mt-0 mb-1">
-                            <span class="filename-attached"><?= $file->name ?> (<?= \Functions::formatBytes($file->filesize, 0); ?>) </span> <a id="select-existing-file-<?php echo $file->fileId; ?>" class="float-right btn btn-sm <?php echo in_array($file->fileId, $newAttachmentFileIds) ? 'btn-outline-danger' : 'btn-outline-primary'; ?>" href="" data-file="<?php echo $file->fileId; ?>" data-size="<?php echo $file->filesize; ?>" title="<?php echo $file->name; ?>"><?php echo in_array($file->fileId, $newAttachmentFileIds) ? 'Remove' : 'Add'; ?></a>
+                            <span class="filename-attached"><span class="attachment-file-name"><?= $file->name ?></span> <span class="attachment-filesize">(<?= \Functions::formatBytes($file->filesize, 0); ?>) </span> <a id="select-existing-file-<?php echo $file->fileId; ?>" class="float-right btn btn-sm <?php echo in_array($file->fileId, $newAttachmentFileIds) ? 'btn-outline-danger' : 'btn-outline-primary'; ?>" href="" data-file="<?php echo $file->fileId; ?>" data-size="<?php echo $file->filesize; ?>" title="<?php echo $file->name; ?>"><?php echo in_array($file->fileId, $newAttachmentFileIds) ? 'Remove' : 'Add'; ?></a>
                           </p>
                         </div>
                       </li>

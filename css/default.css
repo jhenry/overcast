@@ -96,3 +96,11 @@
 	font-size: 55px;
 	color: darkgray;
 }
+
+.attachment-file-name {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	width:200px;
+	display: inline-block;
+}
