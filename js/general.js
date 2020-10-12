@@ -916,8 +916,12 @@ function buildAttachmentCard(index, name, size, file)
     var displayFilename = (name.length > 35) ? name.substring(0, 25) + '...' : name;
     displayFilename += ' (' + formatBytes(size, 0) + ')';
 
-    const captionTemplate = $.templates('#caption-form-template')
-    const renderedCaptionTemplate = captionTemplate.render({file : file })
+    if ($('#caption-form-template').length) {
+        const captionTemplate = $.templates('#caption-form-template')
+        var renderedCaptionTemplate = captionTemplate.render({ file: file })
+    }else{
+        renderedCaptionTemplate = ''
+    }
 
     // Build card
     var $attachment = $('<li class="attachment media border-top mt-1 py-2">'
