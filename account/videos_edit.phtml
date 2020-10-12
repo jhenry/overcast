@@ -107,10 +107,10 @@ $this->setLayout('account');
                     </div>
                     <div class="media-body">
                       <p class="mt-0 mb-1">
-                      <span class="filename-attached"><?= $file[0]->name ?> (<?= \Functions::formatBytes($file[0]->filesize,0); ?>) </span><a class="float-right btn btn-sm btn-outline-danger remove" href="#" role="button">Remove</a>
-                      <?php Plugin::triggerEvent( 'videos.edit.attachment.list', $file[0]->fileId, $video->videoId ); ?>
+                        <span class="filename-attached"><?= $file[0]->name ?> (<?= \Functions::formatBytes($file[0]->filesize, 0); ?>) </span><a class="float-right btn btn-sm btn-outline-danger remove" href="#" role="button">Remove</a>
+                        <?php Plugin::triggerEvent('videos.edit.attachment.list', $file[0]->fileId, $video->videoId); ?>
                       </p>
-                    <?php echo attachmentItem(array("name" => $file[0]->name, "size" => $file[0]->filesize, "file" => $file[0]->fileId), $attachmentCount, false); ?>
+                      <?php echo attachmentItem(array("name" => $file[0]->name, "size" => $file[0]->filesize, "file" => $file[0]->fileId), $attachmentCount, false); ?>
                     </div>
                   </li>
 
@@ -132,20 +132,16 @@ $this->setLayout('account');
                   <p><?php echo Language::getText('select_existing_attachment_help'); ?></p>
                   <ul class="list-group previous-attachments">
                     <?php foreach ($userAttachments as $file) : ?>
-
-                    
                       <li class="media border-top mt-1 py-2<?= (in_array($file->fileId, $attachmentFileIds)) ? ' d-none' : ''; ?>">
-                    <div class="d-flex bg-dark justify-content-center mr-2 related-thumb-container">
-                      <?= attachmentIcon($file->fileId); ?>
-                    </div>
-                    <div class="media-body">
-                      <p class="mt-0 mb-1">
-                      <span class="filename-attached"><?= $file->name ?> (<?= \Functions::formatBytes($file->filesize,0); ?>) </span> <a id="select-existing-file-<?php echo $file->fileId; ?>" class="float-right btn btn-sm <?php echo in_array($file->fileId, $attachmentFileIds) ? 'btn-outline-danger' : 'btn-outline-primary'; ?>" href="" data-file="<?php echo $file->fileId; ?>" data-size="<?php echo $file->filesize; ?>" title="<?php echo $file->name; ?>"><?php echo in_array($file->fileId, $attachmentFileIds) ? 'Remove' : 'Add'; ?></a>
-                      </p>
-                    </div>
-                  </li>
-
-
+                        <div class="d-flex bg-dark justify-content-center mr-2 related-thumb-container">
+                          <?= attachmentIcon($file->fileId); ?>
+                        </div>
+                        <div class="media-body">
+                          <p class="mt-0 mb-1">
+                            <span class="filename-attached"><?= $file->name ?> (<?= \Functions::formatBytes($file->filesize, 0); ?>) </span> <a id="select-existing-file-<?php echo $file->fileId; ?>" class="float-right btn btn-sm <?php echo in_array($file->fileId, $attachmentFileIds) ? 'btn-outline-danger' : 'btn-outline-primary'; ?>" href="" data-file="<?php echo $file->fileId; ?>" data-size="<?php echo $file->filesize; ?>" title="<?php echo $file->name; ?>"><?php echo in_array($file->fileId, $attachmentFileIds) ? 'Remove' : 'Add'; ?></a>
+                          </p>
+                        </div>
+                      </li>
                     <?php endforeach; ?>
                   </ul>
                 </div>

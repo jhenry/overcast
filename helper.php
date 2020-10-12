@@ -333,22 +333,36 @@ function attachmentItem($fileInfo, $attachmentCount, $isNew)
 }
 /**
  * Show attachment image/icon
- * @param int $fileId id of the file attachment
- * @return 
+ * @param mixed $fileId id of the file attachment, or temp file path
+ * @return string HTML DOM element
  *
  **/
 function attachmentIcon($fileId)
 {
+    $config = Registry::get('config');
+
     $fileMapper = new FileMapper();
     $file = $fileMapper->getById($fileId);
-    $ext = $file->extension;
-    $config = Registry::get('config');
+
+    if (!is_file($fileId)) {
+        $ext = $file->extension;
+    } 
+    else {
+        $ext = pathinfo($fileId, PATHINFO_EXTENSION);
+        $fileName = pathinfo($fileId, PATHINFO_BASENAME);
+    }
 
     $img = '<i class="playlist-mini-thumb pt-3 fas fa-file-alt"></i>';
     // Check if the extension matches an image type 
     if (in_array($ext, $config->acceptedImageFormats)) {
-        $fileService = new FileService();
-        $image_url = $fileService->getURL($file);
+        if ($file) {
+            $fileService = new FileService();
+            $image_url = $fileService->getURL($file);
+        }
+        else {
+            $tempDir = getTempDirUrl();
+            $image_url = $tempDir . $fileName;
+        }
         $img = '<img class="playlist-mini-thumb" src="' . $image_url. '" alt="">';
     }
     if (class_exists('AttachCaptions')) {

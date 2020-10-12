@@ -668,8 +668,15 @@ $(document).ready(function(){
         // Append attachment
         $('#video-attachments .attachments').append($attachment);
 
-        // Disable thumbnail button/toggle
-        $attachment.find(".custom-thumb-toggle input[type='radio'][name='custom_thumbnail']").attr('disabled', true)
+        // Disable thumbnail button/toggle, and say why in a tooltip
+        const customThumbInput = $attachment.find(".custom-thumb-toggle input[type='radio'][name='custom_thumbnail']")
+        customThumbInput.attr('disabled', true)
+        customThumbInput.css('pointer-events', 'none')
+        customThumbInput.parent().attr('data-toggle', 'tooltip')
+        customThumbInput.parent().attr('data-placement', 'left')
+        customThumbInput.parent().attr('tabindex', 0)
+        customThumbInput.parent().attr('title', "Can't set new thumb until after video is saved/uploaded.")
+        customThumbInput.parent().tooltip()
 
         // Display image/icon
         if (attachedFileType(name) == 'image') {
