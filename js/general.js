@@ -891,12 +891,13 @@ function buildAttachmentCard(index, name, size, file)
     var displayFilename = (name.length > 35) ? name.substring(0, 35) + '...' : name;
     displayFilename += ' (' + formatBytes(size, 0) + ')';
 
+    const captionTemplate = $.templates('#caption-form-template')
+    const renderedCaptionTemplate = captionTemplate.render(file)
     // Build card
     var $attachment = $('<li class="attachment media border-top mt-1 py-2">'
 
-        // Append form values
-        // TODO: if fieldname is temp, and file is an image, add img tag 
 
+        // Append form values
         + '<div class="upload-ready d-flex bg-dark justify-content-center mr-2 related-thumb-container">'
             + '<input type="hidden" name="attachment[' + index + '][name]" value="' + name + '" />'
             + '<input type="hidden" name="attachment[' + index + '][size]" value="' + size + '" />'
@@ -908,6 +909,7 @@ function buildAttachmentCard(index, name, size, file)
             + '<input type="radio" id="customthumb-' + file + '" name="custom_thumbnail" value="' + file + '" class="custom-control-input">'
             + '<label class="custom-control-label" for="customthumb-' + file + '">Use as thumbnail/poster.</label>'
             + '</div>'
+            + renderedCaptionTemplate
         + '</div>'
 
     + '</li>');
