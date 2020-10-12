@@ -366,7 +366,7 @@ function attachmentIcon($fileId)
         $img = '<img class="playlist-mini-thumb" src="' . $image_url. '" alt="">';
     }
     if (class_exists('AttachCaptions')) {
-        if (in_array($ext, $config->allowedCaptionFormats)) {
+        if (in_array($ext, $config->acceptedCaptionFormats)) {
             $img = '<i class="playlist-mini-thumb pt-3 fas fa-closed-captioning"></i>';
         }
     }

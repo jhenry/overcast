@@ -697,6 +697,7 @@ $(document).ready(function(){
             const tempUrl = tempDirUrl + tempFileName
             const imageHTML = '<img class="playlist-mini-thumb" src="' + tempUrl + '" alt="">'
             $attachment.find('.related-thumb-container').prepend($(imageHTML))
+            $attachment.find('.attach-captions-control').remove()
         }
         else if (attachedFileType(name) == 'caption') {
             const ccIconHTML = '<i class="playlist-mini-thumb pt-3 fas fa-closed-captioning"></i>'
@@ -713,6 +714,10 @@ $(document).ready(function(){
         const customThumbsInstalled = $('meta[name=customthumbs]').attr("content");
         if (typeof customThumbsInstalled === 'undefined') {
             $attachment.find('.custom-thumb-toggle').remove()
+        }
+        const attachCaptionsInstalled = $('meta[name=attachcaptions]').attr("content");
+        if (typeof attachCaptionsInstalled === 'undefined') {
+            $attachment.find('.attach-captions-control').remove()
         }
 
         // Reset upload form
@@ -760,11 +765,19 @@ $(document).ready(function(){
         if (attachedFileType(name) !== 'image') {
             $attachment.find('.custom-thumb-toggle').remove()
         }
+        // and remove caption form from non-captions
+        if (attachedFileType(name) !== 'caption') {
+            $attachment.find('.attach-captions-control').remove()
+        }
 
         // remove toggle if that plugin isn't installed.
         const customThumbsInstalled = $('meta[name=customthumbs]').attr("content");
         if (typeof customThumbsInstalled === 'undefined') {
             $attachment.find('.custom-thumb-toggle').remove()
+        }
+        const attachCaptionsInstalled = $('meta[name=attachcaptions]').attr("content");
+        if (typeof attachCaptionsInstalled === 'undefined') {
+            $attachment.find('.attach-captions-control').remove()
         }
 
         // Hide from the list if it's been added.
@@ -900,11 +913,12 @@ function formatBytes(bytes, precision)
 function buildAttachmentCard(index, name, size, file)
 {
     var fieldName = (typeof file === 'number') ? 'file' : 'temp';
-    var displayFilename = (name.length > 35) ? name.substring(0, 35) + '...' : name;
+    var displayFilename = (name.length > 35) ? name.substring(0, 25) + '...' : name;
     displayFilename += ' (' + formatBytes(size, 0) + ')';
 
     const captionTemplate = $.templates('#caption-form-template')
-    const renderedCaptionTemplate = captionTemplate.render(file)
+    const renderedCaptionTemplate = captionTemplate.render({file : file })
+
     // Build card
     var $attachment = $('<li class="attachment media border-top mt-1 py-2">'
 

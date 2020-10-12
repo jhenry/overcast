@@ -2,7 +2,7 @@
 $this->addJs($this->options->themeUrl . '/js/vendor/jquery.iframe-transport.js');
 $this->addJs($this->options->themeUrl . '/js/vendor/jquery.fileupload.js');
 $this->addMeta('allowedImageFormats', implode($config->acceptedImageFormats, ','));
-$this->addMeta('allowedCaptionFormats', implode($config->acceptedCaptionFormats, ','))
+$this->addMeta('allowedCaptionFormats', implode($config->acceptedCaptionFormats, ','));
 $this->addMeta('tempDirUrl', getTempDirUrl());
 $this->addJs($this->options->themeUrl . '/js/vendor/jsrender.min.js');
 $this->addJs('general.js');
@@ -154,6 +154,7 @@ $this->setLayout('account');
                     <?php endforeach; ?>
                   </ul>
                 </div>
+                <?php Plugin::triggerEvent('videos.edit.attachment.end'); ?>
               <?php endif; ?>
           </div>
         <?php endif; ?>
