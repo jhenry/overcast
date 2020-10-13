@@ -151,6 +151,95 @@ function getSmilSources(Video $video, $json=false)
 }
 
 /**
+ * Generates caption track elements/json for loading into player
+ * @param Video $video The video object to retrieve the video URL for
+ * @param bool $json toggle for return of json or html element format 
+ * @return string HTML elements or JSON for caption tracks.
+ * TODO: check for existence of caption files in the h264 dir (legacy)
+ */
+function getCaptionTracks(Video $video, $json=false)
+{
+    $fileService = new FileService();
+    $videoId = $video->videoId;
+    $tracks = "";
+    if (class_exists('AttachCaptions')) 
+    {
+        $captions = AttachCaptions::get_all_captions($videoId);
+        $video_meta = AttachCaptions::get_video_meta($videoId, 'default_caption');
+        $defaultCaption = $video_meta->meta_value;
+
+        foreach ($captions as $caption) {
+            $dir = $url = $language = "";
+            $default = ($defaultCaption == $caption->fileId) ? true : false;
+            $language = AttachCaptions::get_caption_language($caption->fileId);
+            if (class_exists('Wowza')) 
+            {
+                    $dir = Wowza::get_url_by_video_id($videoId, 'attachments');
+                    $url = $dir . $caption->filename . '.' . $caption->extension;
+            }
+            else 
+            {
+                $url = $fileService->getUrl($caption);
+            }                
+            $tracks .= buildCaptionTrack($url, $language, $default, $json);
+        }
+    }
+
+    $tracks .= buildLocalCaptionTracks($video);
+    
+    return $tracks;
+}
+/**
+ * Builds caption track for loading via JSON or HTML5  
+ * @param string URL to the caption 
+ * @param string language to use for caption label 
+ * @param bool indicate if this is the default caption in the list
+ * @param bool format to return
+ * @return string JSON/HTML5 track
+ */
+function buildCaptionTrack($url, $language, $default, $json=true)
+{
+    $track = $languageLabel = $defaultLabel = "";
+    $languages = AttachCaptions::language_list();
+    $languageLabel = $languages[$language];
+    if ($json) {
+        $defaultLabel = ($default) ? ', "default": true' : "";
+        $track = '{"kind": "caption", "file": "' . $url . '", "label": "' . $languageLabel . '"' . $defaultLabel . '},';
+    } else {
+        $defaultLabel = ($default) ? ' default' : "";
+        $track = '<track label="' . $languageLabel . '" kind="subtitles" srclang="' . $language . '" src="' . $url . '" ' . $defaultLabel . '>';
+    }
+    return $track;
+}
+/**
+ * Builds caption tracks for videos whose caption files have been stored alongside the .mp4 assets 
+ * @param Video $video The video object the captions are attached to
+ * @return string HTML/JSON for track listings 
+ */
+function buildLocalCaptionTracks(Video $video)
+{
+    // Set label for captions that don't have a language attached
+    $defaultLanguage = Settings::get('default_language');
+    $default = true;
+    $tracks = $urlPath = "";
+    if (class_exists('Wowza')) {
+        // Build local paths to look for existing caption files.
+        $h264Path = Settings::get('wowza_upload_dir') . Wowza::get_video_owner_homedir($videoId) . '/h264/'; 
+        $srtFile = $h264Path . $video->filename . '.srt';
+        $vttFile = $h264Path . $video->filename . '.vtt';
+        $urlPath = Wowza::get_url_by_video_id($videoId, 'h264');
+        if (file_exists($srtFile)) {
+            $srtUrl = $urlPath . $video->filename . '.srt';
+            $tracks = buildCaptionTrack($srtUrl, $defaultLanguage, $default, $json);
+        }
+        if (file_exists($vttFile)) {
+            $vttUrl = $urlPath . $video->filename . '.srt';
+            $tracks .= buildCaptionTrack($vttUrl, $defaultLanguage, $default, $json);
+        }
+    }
+    return $tracks;
+}
+/**
  * Retrieves full URL to a video asset 
  * @param Video $video The video object to retrieve the video URL for
  * @return string URL to the a video

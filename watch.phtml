@@ -59,7 +59,8 @@ $this->addJs($this->options->themeUrl . '/js/last.js');
 		    jwplayer("jwplayer").setup({ 
 			"playlist": [{
 				"image": "<?= getVideoThumbUrl($video) ?>",
-				"sources": [<?= getSmilSources($video, true); ?>]
+                "sources": [<?= getSmilSources($video, true); ?>],
+                "tracks":  [<?= getCaptionTracks($video, true); ?>]
 			}]
 		    });
 		</script>
@@ -77,6 +78,7 @@ $this->addJs($this->options->themeUrl . '/js/last.js');
                         <?php if ($theoraEncodingEnabled) : ?>
                             <source src="<?= $config->theoraUrl ?>/<?= $video->filename ?>.ogg" type="video/ogg" />
                         <?php endif; ?>
+                        <?= getCaptionTracks($video, false); ?>
                     </video>
 		<?php endif; ?>
                 </div>
