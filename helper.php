@@ -92,6 +92,20 @@ function useJWPlayer()
 }
 
 /**
+ * Add history/plays to the default pageview counts
+ * 
+ */
+function countViewsAndPlays($video)
+{
+    $plays = 0;
+    if (class_exists('Stats')) {
+        $plays = Stats::countPlays($video);
+    }
+    $total = (int) $plays + (int) $video->views;
+    return $total;
+}
+
+/**
  * Return default flag for AdminPlus configuration setting. 
  * @return bool True if videos are set to this by default in plugin settings.
  */
@@ -165,7 +179,11 @@ function getCaptionTracks(Video $video, $json=false)
     {
         $captions = AttachCaptions::get_all_captions($videoId);
         $video_meta = AttachCaptions::get_video_meta($videoId, 'default_caption');
-        $defaultCaption = $video_meta->meta_value;
+        if ($video_meta) {
+            $defaultCaption = $video_meta->meta_value;
+        } else {
+            $defaultCaption = 0;
+        }
 
         foreach ($captions as $caption) {
             $dir = $url = $language = "";
@@ -332,7 +350,8 @@ BUTTON;
 function isRated($video, $loggedInUser) {
     $liked = false;
     $ratingMapper = new RatingMapper();
-    $usersLikes = $ratingMapper->getRatingByCustom(array('video_id' => $video->videoId, 'user_id' => $loggedInUser->userId, 'rating' => 1));
+    $userId = (isset($loggedInUser->userId)) ? $loggedInUser->userId : 0;
+    $usersLikes = $ratingMapper->getRatingByCustom(array('video_id' => $video->videoId, 'user_id' => $userId, 'rating' => 1));
     if($usersLikes) {
 	    if (count(get_object_vars($usersLikes))) {
 		    $liked = true;
