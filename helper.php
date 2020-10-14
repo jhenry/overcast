@@ -155,7 +155,6 @@ function getSmilSources(Video $video, $json=false)
  * @param Video $video The video object to retrieve the video URL for
  * @param bool $json toggle for return of json or html element format 
  * @return string HTML elements or JSON for caption tracks.
- * TODO: check for existence of caption files in the h264 dir (legacy)
  */
 function getCaptionTracks(Video $video, $json=false)
 {
@@ -233,7 +232,7 @@ function buildLocalCaptionTracks(Video $video)
             $tracks = buildCaptionTrack($srtUrl, $defaultLanguage, $default, $json);
         }
         if (file_exists($vttFile)) {
-            $vttUrl = $urlPath . $video->filename . '.srt';
+            $vttUrl = $urlPath . $video->filename . '.vtt';
             $tracks .= buildCaptionTrack($vttUrl, $defaultLanguage, $default, $json);
         }
     }
