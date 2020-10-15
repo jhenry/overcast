@@ -82,11 +82,11 @@ function getVideoThumbUrl(Video $video)
  */
 function useJWPlayer()
 {
-    if( class_exists( 'AdminPlus' ) ){
-	$enabled = Settings::get('adminplus_jwplayer_enabled');
-	if( $enabled ){
-		return true;
-	}
+    if (class_exists('AdminPlus')) {
+        $enabled = Settings::get('adminplus_jwplayer_enabled');
+        if ($enabled) {
+            return true;
+        }
     }
     return false;
 }
@@ -186,7 +186,7 @@ function getCaptionTracks(Video $video, $json=false)
         }
 
         foreach ($captions as $caption) {
-            $dir = $url = $language = "";
+            $dir = $url = "";
             $default = ($defaultCaption == $caption->fileId) ? true : false;
             $language = AttachCaptions::get_caption_language($caption->fileId);
             if (class_exists('Wowza')) 
