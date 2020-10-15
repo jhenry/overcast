@@ -4,10 +4,12 @@
 
 // Set up theater mode toggles 
 $(function () {
-  var player = videojs('vjs_video_3_html5_api')
+  if (typeof videojs === 'function') {
+    var player = videojs('vjs_video_3_html5_api')
 
-  player.theaterMode({
-    elementToToggle: 'video-col',
-    className: 'col-md-12'
-  })
+    player.theaterMode({
+      elementToToggle: 'video-col',
+      className: 'col-md-12'
+    })
+  }
 })

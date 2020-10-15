@@ -13,3 +13,7 @@ To prevent stretching of the carousel images on the landing/home page, you may n
 ```
 -vf "scale=min(1600\,iw):trunc(ow/a/2)*2" -t 1 -r 1 -f mjpeg
 ```
+
+## Misc
+
+This theme makes use of the [Font Awesome](https://fontawesome.com) library.

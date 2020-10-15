@@ -92,6 +92,20 @@ function useJWPlayer()
 }
 
 /**
+ * Add history/plays to the default pageview counts
+ * 
+ */
+function countViewsAndPlays($video)
+{
+    $plays = 0;
+    if (class_exists('Stats')) {
+        $plays = Stats::countPlays($video);
+    }
+    $total = (int) $plays + (int) $video->views;
+    return $total;
+}
+
+/**
  * Return default flag for AdminPlus configuration setting. 
  * @return bool True if videos are set to this by default in plugin settings.
  */
@@ -150,6 +164,98 @@ function getSmilSources(Video $video, $json=false)
     return $source;
 }
 
+/**
+ * Generates caption track elements/json for loading into player
+ * @param Video $video The video object to retrieve the video URL for
+ * @param bool $json toggle for return of json or html element format 
+ * @return string HTML elements or JSON for caption tracks.
+ */
+function getCaptionTracks(Video $video, $json=false)
+{
+    $fileService = new FileService();
+    $videoId = $video->videoId;
+    $tracks = "";
+    if (class_exists('AttachCaptions')) 
+    {
+        $captions = AttachCaptions::get_all_captions($videoId);
+        $video_meta = AttachCaptions::get_video_meta($videoId, 'default_caption');
+        if ($video_meta) {
+            $defaultCaption = $video_meta->meta_value;
+        } else {
+            $defaultCaption = 0;
+        }
+
+        foreach ($captions as $caption) {
+            $dir = $url = $language = "";
+            $default = ($defaultCaption == $caption->fileId) ? true : false;
+            $language = AttachCaptions::get_caption_language($caption->fileId);
+            if (class_exists('Wowza')) 
+            {
+                    $dir = Wowza::get_url_by_video_id($videoId, 'attachments');
+                    $url = $dir . $caption->filename . '.' . $caption->extension;
+            }
+            else 
+            {
+                $url = $fileService->getUrl($caption);
+            }                
+            $tracks .= buildCaptionTrack($url, $language, $default, $json);
+        }
+    }
+
+    $tracks .= buildLocalCaptionTracks($video);
+    
+    return $tracks;
+}
+/**
+ * Builds caption track for loading via JSON or HTML5  
+ * @param string URL to the caption 
+ * @param string language to use for caption label 
+ * @param bool indicate if this is the default caption in the list
+ * @param bool format to return
+ * @return string JSON/HTML5 track
+ */
+function buildCaptionTrack($url, $language, $default, $json=true)
+{
+    $track = $languageLabel = $defaultLabel = "";
+    $languages = AttachCaptions::language_list();
+    $languageLabel = $languages[$language];
+    if ($json) {
+        $defaultLabel = ($default) ? ', "default": true' : "";
+        $track = '{"kind": "caption", "file": "' . $url . '", "label": "' . $languageLabel . '"' . $defaultLabel . '},';
+    } else {
+        $defaultLabel = ($default) ? ' default' : "";
+        $track = '<track label="' . $languageLabel . '" kind="subtitles" srclang="' . $language . '" src="' . $url . '" ' . $defaultLabel . '>';
+    }
+    return $track;
+}
+/**
+ * Builds caption tracks for videos whose caption files have been stored alongside the .mp4 assets 
+ * @param Video $video The video object the captions are attached to
+ * @return string HTML/JSON for track listings 
+ */
+function buildLocalCaptionTracks(Video $video)
+{
+    // Set label for captions that don't have a language attached
+    $defaultLanguage = Settings::get('default_language');
+    $default = true;
+    $tracks = $urlPath = "";
+    if (class_exists('Wowza')) {
+        // Build local paths to look for existing caption files.
+        $h264Path = Settings::get('wowza_upload_dir') . Wowza::get_video_owner_homedir($videoId) . '/h264/'; 
+        $srtFile = $h264Path . $video->filename . '.srt';
+        $vttFile = $h264Path . $video->filename . '.vtt';
+        $urlPath = Wowza::get_url_by_video_id($videoId, 'h264');
+        if (file_exists($srtFile)) {
+            $srtUrl = $urlPath . $video->filename . '.srt';
+            $tracks = buildCaptionTrack($srtUrl, $defaultLanguage, $default, $json);
+        }
+        if (file_exists($vttFile)) {
+            $vttUrl = $urlPath . $video->filename . '.vtt';
+            $tracks .= buildCaptionTrack($vttUrl, $defaultLanguage, $default, $json);
+        }
+    }
+    return $tracks;
+}
 /**
  * Retrieves full URL to a video asset 
  * @param Video $video The video object to retrieve the video URL for
@@ -244,7 +350,8 @@ BUTTON;
 function isRated($video, $loggedInUser) {
     $liked = false;
     $ratingMapper = new RatingMapper();
-    $usersLikes = $ratingMapper->getRatingByCustom(array('video_id' => $video->videoId, 'user_id' => $loggedInUser->userId, 'rating' => 1));
+    $userId = (isset($loggedInUser->userId)) ? $loggedInUser->userId : 0;
+    $usersLikes = $ratingMapper->getRatingByCustom(array('video_id' => $video->videoId, 'user_id' => $userId, 'rating' => 1));
     if($usersLikes) {
 	    if (count(get_object_vars($usersLikes))) {
 		    $liked = true;
@@ -267,7 +374,20 @@ function videoCardBlock($viewFile, $video)
     extract(get_object_vars($this->vars));
     include($block);
 }
-                
+
+/**
+* Set url for temp directory in meta, to allow thumb display on upload.
+*
+*/
+function getTempDirUrl() {
+    if (class_exists('Wowza')) {
+        $tempDir = Wowza::get_url_by_video_id($video->videoId, 'temp');
+    } else {
+        $tempDir = BASE_URL . '/cc-content/uploads/temp/';
+    }
+    return $tempDir;
+}
+
 /**
  * Set message type class to use bootstrap alert styles
  * @param string $message_type status message passed from controller
@@ -311,18 +431,55 @@ function attachmentItem($fileInfo, $attachmentCount, $isNew)
 		$file = "file";
 	}
 
-	$attachedItem = '
-                        <input type="hidden" name="attachment[' . $attachmentCount . '][name]" value="' . $fileInfo['name'] . '" />
+	$attachedItem = '   <input type="hidden" name="attachment[' . $attachmentCount . '][name]" value="' . $fileInfo['name'] . '" />
                         <input type="hidden" name="attachment[' . $attachmentCount . '][size]" value="' . $fileInfo['size'] . '" />
                         <input type="hidden" name="attachment[' . $attachmentCount . '][' . $file . ']" value="' . $fileInfo[$file] . '" />
-
-                        <div class="upload-ready">
-				<p><span class="filename-attached">' . $fileInfo['name'] . ' (' . \Functions::formatBytes($fileInfo['size'],0) . ')</span><a class="float-right btn btn-sm btn-outline-danger remove" href="#" role="button">Remove</a></p>
-                        </div>';
+                        ';
 
 	return $attachedItem;
 }
+/**
+ * Show attachment image/icon
+ * @param mixed $fileId id of the file attachment, or temp file path
+ * @return string HTML DOM element
+ *
+ **/
+function attachmentIcon($fileId)
+{
+    $config = Registry::get('config');
 
+    $fileMapper = new FileMapper();
+    $file = $fileMapper->getById($fileId);
+
+    if (!is_file($fileId)) {
+        $ext = $file->extension;
+    } 
+    else {
+        $ext = pathinfo($fileId, PATHINFO_EXTENSION);
+        $fileName = pathinfo($fileId, PATHINFO_BASENAME);
+    }
+
+    $img = '<i class="playlist-mini-thumb pt-3 fas fa-file-alt"></i>';
+    // Check if the extension matches an image type 
+    if (in_array($ext, $config->acceptedImageFormats)) {
+        if ($file) {
+            $fileService = new FileService();
+            $image_url = $fileService->getURL($file);
+        }
+        else {
+            $tempDir = getTempDirUrl();
+            $image_url = $tempDir . $fileName;
+        }
+        $img = '<img class="playlist-mini-thumb" src="' . $image_url. '" alt="">';
+    }
+    if (class_exists('AttachCaptions')) {
+        if (in_array($ext, $config->acceptedCaptionFormats)) {
+            $img = '<i class="playlist-mini-thumb pt-3 fas fa-closed-captioning"></i>';
+        }
+    }
+    return $img;
+
+} 
 /**
  * Get video processing/approval status
  * @param string $status Flag for status state of the video.
