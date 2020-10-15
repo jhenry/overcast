@@ -82,11 +82,11 @@ function getVideoThumbUrl(Video $video)
  */
 function useJWPlayer()
 {
-    if( class_exists( 'AdminPlus' ) ){
-	$enabled = Settings::get('adminplus_jwplayer_enabled');
-	if( $enabled ){
-		return true;
-	}
+    if (class_exists('AdminPlus')) {
+        $enabled = Settings::get('adminplus_jwplayer_enabled');
+        if ($enabled) {
+            return true;
+        }
     }
     return false;
 }

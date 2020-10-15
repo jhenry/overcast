@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="<?= Settings::get('default_language'); ?>">
+<head>
+  <title><?=$video->title?></title>
+
+  <meta charset="utf-8">
+  <?php $useJWPlayer = useJWPlayer(); ?>
+  <?php if ($useJWPlayer): ?>
+    <script src="<?= Settings::get('adminplus_jwplayer_source'); ?>"></script>
+  <?php else: ?>
+    <link rel="stylesheet" href="<?= $this->options->themeUrl . '/css/vendor/video-js.css'; ?>">
+    <script src="<?= $this->options->themeUrl . '/js/vendor/video.min.js'; ?>"></script>
+  <?php endif; ?>
+</head>
+<body>
+
+<?php
+
+$authService = new AuthService();
+$user = $authService->getAuthUser();
+//$userId = ($user) ? $user->userId : false;
+
+// If it's a gated video but the user's not logged in, set up login link toggle
+$loginNeeded = ($video->gated && !$user) ? true : false;
+?>
+
+<?php if ($video): ?>
+  
+  <?php $link = $this->getService('Video')->getUrl($video); ?>
+
+  <?php if ($video->disableEmbed): ?>
+    <div class="video-unavailable"><p><?= Language::getText('embed_disabled', array ('link' => $link, 'sitename' => $config->sitename)); ?></p></div>
+  <?php endif; ?>
+
+  <?php if ($loginNeeded): ?>
+    <div class="video-unavailable"><p><?= Language::getText('video_unavailable',array ('link' => $link, 'HERE' => 'Unlock','CLASS' =>'class="button_small"')); ?></p></div>
+  <?php endif; ?>
+
+<?php if(!$video->disableEmbed && !$loginNeeded): ?>
+<!-- BEGIN VIDEO -->
+  <div id="player" class="mb-1">
+    <?php if ($useJWPlayer) : ?>
+    <?php
+    $mediaid = substr($video->filename, 0, 8);
+    $mediaspace = "_mediaspace_" . $mediaid;
+    ?>
+    <div id="jwplayer<?= $mediaspace; ?>"></div>
+
+    <script>
+      var player<?= $mediaspace; ?> = jwplayer("jwplayer<?= $mediaspace; ?>").setup({ 
+        "playlist": [{
+          "mediaid": "<?= $mediaid; ?>",
+          "image": "<?= getVideoThumbUrl($video) ?>",
+          "sources": [<?= getSmilSources($video, true); ?>],
+          "tracks":  [<?= getCaptionTracks($video, true); ?>]
+        }]
+      });
+    </script>
+    <?php Plugin::triggerEvent('videos.watch.player.end', $mediaspace, $video); ?>
+  <?php else : ?>
+    <video class="video-js vjs-big-play-centered" controls preload="auto" data-setup='{ "autoplay": false, "fluid": true, "aspectRatio": "16:9", "playbackRates": [0.5, 1, 1.5, 2, 2.5]}' poster="<?= getVideoThumbUrl($video) ?>">
+        <?php if (smilFileExists($video)) : ?>
+            <source src="<?= getMediaUrl($video) ?>" type="video/mp4" />
+        <?php else : ?>
+            <?= getSmilSources($video); ?>
+        <?php endif; ?>
+
+        <?php if ($webmEncodingEnabled) : ?>
+            <source src="<?= $config->webmUrl ?>/<?= $video->filename ?>.webm" type="video/webm" />
+        <?php endif; ?>
+        <?php if ($theoraEncodingEnabled) : ?>
+            <source src="<?= $config->theoraUrl ?>/<?= $video->filename ?>.ogg" type="video/ogg" />
+        <?php endif; ?>
+        <?= getCaptionTracks($video, false); ?>
+    </video>
+  <?php endif; ?>
+<?php endif; ?>
+  </div>
+                <!-- END VIDEO -->
+<?php endif; ?>
+
+<?php if (!$useJWPlayer): ?>
+  <script src="<?=$this->options->themeUrl?>/js/video.plugin.js"></script>
+<?php endif; ?>
+</body>
+</html>
