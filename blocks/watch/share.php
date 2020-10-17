@@ -1,7 +1,6 @@
 <div class="card mb-3 border-top-0 rounded-0">
 	<div class="row justify-content-between m-3">
 		<div class="col-md-7">
-			<?php if ($video->disableEmbed == '0' && $video->gated == '0') : ?>
 				<!-- EMBED CODE -->
 				<form>
 					<h5>Direct Link</h5>
@@ -12,6 +11,7 @@
 							<button class="btn btn-outline-primary btn-clipboard" data-clipboard-target="#directLink" type="button">Copy</button>
 						</div>
 					</div>
+					<?php if (!$video->disableEmbed) : ?>
 					<h5 class="mt-3">iFrame Embed</h5>
 					<div class="form-group">
 						<label for="embedCode"><?= Language::getText('embed_text') ?></label>
@@ -28,8 +28,8 @@
 							<button class="btn btn-outline-primary btn-clipboard" data-clipboard-target="#autoEmbedCode" type="button">Copy</button>
 						</div>
 					</div>
+					<?php endif; ?>
 				</form>
-			<?php endif; ?>
 		</div>
 		<div class="col-md-4 sharing-buttons">
 			<h5>Share</h5>
