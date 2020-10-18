@@ -8,9 +8,8 @@ $this->setLayout('account');
 ?>
 
 <div class="row">
-  <div class="col">
+  <div class="col upload-banner">
     <h2><?=Language::getText('upload_video_header')?></h2>
-    <div class="message <?=$message_type?>"><?=$message?></div>
     <?php ( isset($message) ) ? showAlertMessage($message, $message_type) : ''; ?>
   </div>
 </div>

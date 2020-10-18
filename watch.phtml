@@ -9,11 +9,15 @@ $this->addMeta('report_abuse', Language::getText('report_abuse'));
 if ($loggedInUser && !$video->commentsClosed) {
     $this->addMeta('reply', Language::getText('reply'));
 }
-$this->addCss($this->options->themeUrl . '/css/vendor/video-js.css');
-$this->addJs($this->options->themeUrl . '/js/vendor/video.min.js');
 
-$this->addCss($this->options->themeUrl . '/css/vendor/videojs.theaterMode.css');
-$this->addJs($this->options->themeUrl . '/js/vendor/videojs.theaterMode.js');
+$useJWPlayer = useJWPlayer();
+if (!$useJWPlayer) {
+    $this->addCss($this->options->themeUrl . '/css/vendor/video-js.css');
+    $this->addJs($this->options->themeUrl . '/js/vendor/video.min.js');
+
+    $this->addCss($this->options->themeUrl . '/css/vendor/videojs.theaterMode.css');
+    $this->addJs($this->options->themeUrl . '/js/vendor/videojs.theaterMode.js');
+}
 //$this->addJs($this->options->themeUrl . '/js/general.js');
 
 $this->addJs($this->options->themeUrl . '/js/vendor/moment.min.js');
@@ -47,24 +51,53 @@ $this->addJs($this->options->themeUrl . '/js/last.js');
             <?php else : ?>
                 <!-- BEGIN VIDEO -->
                 <div id="player" class="mb-1">
-                    <video class="video-js vjs-big-play-centered" controls preload="auto" data-setup='{ "autoplay": false, "fluid": true, "aspectRatio": "16:9"}' poster="<?= getVideoThumbUrl($video) ?>">
-                        <source src="<?= getH264Url($video) ?>" type="video/mp4" />
-                        <?php Plugin::triggerEvent('watch.video.source', $video); ?>
-                        <?php if ($webmEncodingEnabled) : ?>
-                            <source src="<?= $config->webmUrl ?>/<?= $video->filename ?>.webm" type="video/webm" />
-                        <?php endif; ?>
-                        <?php if ($theoraEncodingEnabled) : ?>
-                            <source src="<?= $config->theoraUrl ?>/<?= $video->filename ?>.ogg" type="video/ogg" />
-                        <?php endif; ?>
-                    </video>
+                    <?php if ($useJWPlayer) : ?>
+                        <?php
+                        $mediaid = substr($video->filename, 0, 8);
+                        $mediaspace = "_mediaspace_" . $mediaid;
+                        ?>
+                        <div id="jwplayer<?= $mediaspace; ?>"></div>
+
+                        <script>
+
+                            var player<?= $mediaspace; ?> = jwplayer("jwplayer<?= $mediaspace; ?>").setup({ 
+			"playlist": [{
+				"mediaid": "<?= $mediaid; ?>",
+				"image": "<?= getVideoThumbUrl($video) ?>",
+                "sources": [<?= getSmilSources($video, true); ?>],
+                "tracks":  [<?= getCaptionTracks($video, true); ?>]
+			}]
+            });
+		</script>
+                        <?php Plugin::triggerEvent('videos.watch.player.end', $mediaspace, $video); ?>
+                    <?php else : ?>
+                        <video class="video-js vjs-big-play-centered" controls preload="auto" data-setup='{ "autoplay": false, "fluid": true, "aspectRatio": "16:9", "playbackRates": [0.5, 1, 1.5, 2, 2.5]}' poster="<?= getVideoThumbUrl($video) ?>">
+                            <?php if (smilFileExists($video)) : ?>
+                                <source src="<?= getMediaUrl($video) ?>" type="video/mp4" />
+                            <?php else : ?>
+                                <?= getSmilSources($video); ?>
+                            <?php endif; ?>
+
+                            <?php if ($webmEncodingEnabled) : ?>
+                                <source src="<?= $config->webmUrl ?>/<?= $video->filename ?>.webm" type="video/webm" />
+                            <?php endif; ?>
+                            <?php if ($theoraEncodingEnabled) : ?>
+                                <source src="<?= $config->theoraUrl ?>/<?= $video->filename ?>.ogg" type="video/ogg" />
+                            <?php endif; ?>
+                            <?= getCaptionTracks($video, false); ?>
+                        </video>
+                    <?php endif; ?>
                 </div>
                 <!-- END VIDEO -->
             <?php endif; ?>
 
             <!-- BEGIN ACTIONS -->
             <div class="row actions">
+                    <?php
+                    $views = countViewsAndPlays($video);
+                    ?>
                 <div class="col-md-6">
-                    <p class="large">Viewed <?= $video->views ?> times.</p>
+                    <p class="large">Viewed <?= $views; ?> times.</p>
                 </div>
                 <div class="col-md-6">
                     <div class="btn-toolbar float-right" role="toolbar" aria-label="Video actions.">
@@ -75,11 +108,11 @@ $this->addJs($this->options->themeUrl . '/js/last.js');
                                 <a id="like" class="like rating btn btn-sm btn-outline-primary" href="" data-rating="1" data-video_id=<?= $video->videoId; ?> role="button"><i class="far fa-heart like-icon" alt="Click to like this video."></i> <span class="likes badge badge-light"><?= $rating->likes ?></span> <span class="sr-only"> likes for this video.</span> </a>
                             <?php endif; ?>
                         </div>
-                    <?php if ($loggedInUser) : ?>
-                        <div class="btn-group button-actions" role="group" aria-label="Playlist Actions.">
-                            <?php include $this->getFallbackPath("blocks/playlist-buttons.phtml"); ?>
-                        </div>
-                    <?php endif; ?>
+                        <?php if ($loggedInUser) : ?>
+                            <div class="btn-group button-actions" role="group" aria-label="Playlist Actions.">
+                                <?php include $this->getFallbackPath("blocks/playlist-buttons.phtml"); ?>
+                            </div>
+                        <?php endif; ?>
                     </div>
 
                 </div>

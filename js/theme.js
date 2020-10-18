@@ -284,3 +284,5 @@ $('.btn-clipboard').tooltip({
 })
 
 $('.watch-later-mini').tooltip({ placement: 'bottom' })
+
+$(".temp-custom-thumb").tooltip()

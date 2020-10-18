@@ -63,7 +63,7 @@ if ( $message ){
       </div>
       <form action="<?=HOST?>/login/" method="post">
       <div class="modal-body">
-            <?php if ($forgot_login_errors): ?>
+            <?php if (isset($forgot_login_errors)): ?>
                 <div class="alert <?=$message_type?>" role="alert"><?=$message?></div>
             <?php endif; ?>
             <p><?=Language::getText('forgot_text')?></p>
@@ -72,7 +72,7 @@ if ( $message ){
                 <label for="email"><?=Language::getText('email')?>:</label>
                 </div>
                 <div class="col-6">
-                <input type="email" class="form-control <?=($forgot_login_errors) ? 'is-invalid' : ''?>" id="email" name="email" />
+                <input type="email" class="form-control <?=(isset($forgot_login_errors)) ? 'is-invalid' : ''?>" id="email" name="email" autofocus/>
                 </div>
             </div>
       </div>

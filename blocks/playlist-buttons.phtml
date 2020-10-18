@@ -15,7 +15,7 @@
     $favoritesCount = sizeof($watchLater->entries);
     $favoritesListed = isInPlaylist($video, $favorites);
     ?>
-    <button data-playlist_id="<?= $favorites->playlistId ?>" data-video_id="<?= $video->videoId ?>" data-action="<?php echo $favoritesListed ? 'remove' : 'add'; ?>" class="btn btn-outline-secondary addToPlaylist favorites<?php echo $favoritesListed ? ' added' : '' ?>" role="button" href="#"><i class="playlist-icon fa-star text-warning<?= ($favoritesListed) ? ' fas' : ' far'; ?>" alt="<?= ($isListed) ? 'Video is in playlist.' : 'Video not in this playlist.'; ?>"></i></button>
+    <button data-playlist_id="<?= $favorites->playlistId ?>" data-video_id="<?= $video->videoId ?>" data-action="<?php echo $favoritesListed ? 'remove' : 'add'; ?>" class="btn btn-outline-secondary addToPlaylist favorites<?php echo $favoritesListed ? ' added' : '' ?>" role="button" href="#"><i class="playlist-icon fa-star text-warning<?= ($favoritesListed) ? ' fas' : ' far'; ?>" alt="<?= ($favoritesListed) ? 'Video is in playlist.' : 'Video not in this playlist.'; ?>"></i></button>
 
     <button id="playlists-dropdown-button" type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       Playlists

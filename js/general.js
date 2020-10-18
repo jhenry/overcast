@@ -637,6 +637,9 @@ $(document).ready(function(){
             $('#select-existing-file-' + fileId).removeClass('btn-outline-danger');
             $('#select-existing-file-' + fileId).addClass('btn-outline-primary');
             $('#select-existing-file-' + fileId).html('Add');
+
+            // Show attachment in the "previous attachments" area
+            $('.attachment-form-existing').find('#select-existing-file-' + fileId).closest('.media').removeClass('d-none')
         }
 
         $attachment.remove();
@@ -665,6 +668,58 @@ $(document).ready(function(){
         // Append attachment
         $('#video-attachments .attachments').append($attachment);
 
+        // Disable thumbnail button/toggle, and say why in a tooltip
+        const customThumbInput = $attachment.find(".custom-thumb-toggle input[type='radio'][name='custom_thumbnail']")
+        customThumbInput.attr('disabled', true)
+        customThumbInput.css('pointer-events', 'none')
+        customThumbInput.parent().attr('tabindex', 0)
+        customThumbInput.parent().tooltip({'data-toggle' : 'tooltip', 'placement' : 'left', 'title' : "Can't set new thumb until after video is saved/uploaded."})
+        
+        // Disable caption form elements
+        const captionLanguage = $attachment.find(".attach-captions-control .subtitle-language")
+        captionLanguage.attr('disabled',true)
+        captionLanguage.css('pointer-events', 'none')
+        captionLanguage.parent().attr('tabindex', 0)
+        captionLanguage.parent().tooltip({'data-toggle' : 'tooltip', 'placement' : 'left', 'title' : "Can't set new caption language until after video is saved/uploaded."})
+        captionLanguage.parent().tooltip()
+
+        const captionInput = $attachment.find(".attach-captions-control input[type='radio'][name='default_caption']")
+        captionInput.attr('disabled', true)
+        captionInput.css('pointer-events', 'none')
+        captionInput.parent().attr('tabindex', 0)
+        captionInput.parent().tooltip({'data-toggle' : 'tooltip', 'placement' : 'left', 'title' : "Can't configure caption until after video is saved/uploaded."})
+        captionInput.parent().tooltip()
+
+        // Display image/icon
+        if (attachedFileType(name) == 'image') {
+            const tempFileName = temp.replace(/^.*[\\\/]/, '')
+            const tempDirUrl = $('meta[name=tempDirUrl]').attr("content");
+            const tempUrl = tempDirUrl + tempFileName
+            const imageHTML = '<img class="playlist-mini-thumb" src="' + tempUrl + '" alt="">'
+            $attachment.find('.related-thumb-container').prepend($(imageHTML))
+            $attachment.find('.attach-captions-control').remove()
+        }
+        else if (attachedFileType(name) == 'caption') {
+            const ccIconHTML = '<i class="playlist-mini-thumb pt-3 fas fa-closed-captioning"></i>'
+            $attachment.find('.related-thumb-container').prepend($(ccIconHTML)) 
+            $attachment.find('.custom-thumb-toggle').remove()
+        }
+        else {
+            const fileIconHTML = '<i class="playlist-mini-thumb pt-3 fas fa-file-alt"></i>'
+            $attachment.find('.related-thumb-container').prepend($(fileIconHTML)) 
+            $attachment.find('.custom-thumb-toggle').remove()
+        }
+
+        // remove toggle if that plugin isn't installed.
+        const customThumbsInstalled = $('meta[name=customthumbs]').attr("content");
+        if (typeof customThumbsInstalled === 'undefined') {
+            $attachment.find('.custom-thumb-toggle').remove()
+        }
+        const attachCaptionsInstalled = $('meta[name=attachcaptions]').attr("content");
+        if (typeof attachCaptionsInstalled === 'undefined') {
+            $attachment.find('.attach-captions-control').remove()
+        }
+
         // Reset upload form
         resetProgress($uploadWidget);
     });
@@ -689,7 +744,10 @@ $(document).ready(function(){
             $(this).removeClass('btn-outline-danger');
             $(this).addClass('btn-outline-primary');
             $(this).html('Add');
+            
             $('#existing-file-' + fileId).remove();
+
+
             return;
         }
 
@@ -699,9 +757,35 @@ $(document).ready(function(){
         var index = $('#video-attachments .attachments .attachment').length;
         var $attachment = buildAttachmentCard(index, name, size, fileId);
 
+        // Add image/icon to attachment.
+        const image = $(this).closest('.media').find('.related-thumb-container').html()
+        $attachment.find('.related-thumb-container').prepend($(image))
+
+        // Remove Custom thumb button from non-images.
+        if (attachedFileType(name) !== 'image') {
+            $attachment.find('.custom-thumb-toggle').remove()
+        }
+        // and remove caption form from non-captions
+        if (attachedFileType(name) !== 'caption') {
+            $attachment.find('.attach-captions-control').remove()
+        }
+
+        // remove toggle if that plugin isn't installed.
+        const customThumbsInstalled = $('meta[name=customthumbs]').attr("content");
+        if (typeof customThumbsInstalled === 'undefined') {
+            $attachment.find('.custom-thumb-toggle').remove()
+        }
+        const attachCaptionsInstalled = $('meta[name=attachcaptions]').attr("content");
+        if (typeof attachCaptionsInstalled === 'undefined') {
+            $attachment.find('.attach-captions-control').remove()
+        }
+
+        // Hide from the list if it's been added.
+        $(this).closest('.media').addClass('d-none')
+
         // Mark as selected
-        $(this).addClass('btn-outline-danger');
-        $(this).html('Remove');
+        //$(this).addClass('btn-outline-danger');
+        //$(this).html('Remove');
 
         // Append attachment
         $('#video-attachments .attachments').append($attachment);
@@ -716,6 +800,33 @@ $(document).ready(function(){
 /****************
 GENERAL FUNCTIONS
 ****************/
+
+/**
+ * Determine attachment file type
+ * @param fileName name of file
+ * @return string indicator describing type of file (i.e. 'image', 'caption')
+ */
+function attachedFileType(fileName)
+{
+    const attachedName = fileName.split('.')
+    const attachedExt = attachedName[1]
+
+    const allowedImagesMeta = $('meta[name=allowedImageFormats]').attr("content");
+    if (typeof allowedImagesMeta !== 'undefined') {
+        const allowedImages = allowedImagesMeta.split(',')
+        if (allowedImages.includes(attachedExt) == true) {
+            return 'image'
+        }
+    }
+    const allowedCaptionsMeta = $('meta[name=allowedCaptionFormats]').attr("content");
+    if (typeof allowedCaptionsMeta !== 'undefined') {
+        const allowedCaptions = allowedCaptionsMeta.split(',')
+        if (allowedCaptions.includes(attachedExt) == true) {
+            return 'caption'
+        }
+    }
+    return ''
+}
 
 /**
  * Retrieve localised string via AJAX
@@ -802,20 +913,34 @@ function formatBytes(bytes, precision)
 function buildAttachmentCard(index, name, size, file)
 {
     var fieldName = (typeof file === 'number') ? 'file' : 'temp';
-    var displayFilename = (name.length > 35) ? name.substring(0, 35) + '...' : name;
+    var displayFilename = (name.length > 35) ? name.substring(0, 25) + '...' : name;
     displayFilename += ' (' + formatBytes(size, 0) + ')';
 
+    if ($('#caption-form-template').length) {
+        const captionTemplate = $.templates('#caption-form-template')
+        var renderedCaptionTemplate = captionTemplate.render({ file: file })
+    }else{
+        renderedCaptionTemplate = ''
+    }
+
     // Build card
-    var $attachment = $('<li class="attachment list-group-item">'
+    var $attachment = $('<li class="attachment media border-top mt-1 py-2">'
+
 
         // Append form values
-
-        + '<div class="upload-ready">'
-		+ '<input type="hidden" name="attachment[' + index + '][name]" value="' + name + '" />'
-		+ '<input type="hidden" name="attachment[' + index + '][size]" value="' + size + '" />'
-		+ '<input type="hidden" name="attachment[' + index + '][' + fieldName + ']" value="' + file + '" />'
-		+ '<p><span class="filename-attached">' + displayFilename + '</span><a class="float-right btn btn-sm btn-outline-danger remove" href="#" role="button">Remove</a></p>'
-	+ '</div>'
+        + '<div class="upload-ready d-flex bg-dark justify-content-center mr-2 related-thumb-container">'
+            + '<input type="hidden" name="attachment[' + index + '][name]" value="' + name + '" />'
+            + '<input type="hidden" name="attachment[' + index + '][size]" value="' + size + '" />'
+            + '<input type="hidden" name="attachment[' + index + '][' + fieldName + ']" value="' + file + '" />'
+        + '</div>'
+        + '<div class="media-body">'
+            + '<p class="mt-0 mb-1"><span class="filename-attached">' + displayFilename + '</span><a class="float-right btn btn-sm btn-outline-danger remove" href="#" role="button">Remove</a></p>'
+            + '<div class="pt-2 custom-control custom-radio custom-thumb-toggle">'
+            + '<input type="radio" id="customthumb-' + file + '" name="custom_thumbnail" value="' + file + '" class="custom-control-input">'
+            + '<label class="custom-control-label" for="customthumb-' + file + '">Use as thumbnail/poster.</label>'
+            + '</div>'
+            + renderedCaptionTemplate
+        + '</div>'
 
     + '</li>');
 
