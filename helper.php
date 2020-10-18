@@ -481,8 +481,16 @@ function attachmentIcon($fileId)
     // Check if the extension matches an image type 
     if (in_array($ext, $config->acceptedImageFormats)) {
         if ($file) {
-            $fileService = new FileService();
-            $image_url = $fileService->getURL($file);
+	    if (class_exists('Wowza'))
+	    {
+		    $thumb_dir = Wowza::get_url_by_user_id($file->userId, 'attachments');
+		    $image_url = $thumb_dir . $file->filename . '.' . $ext;
+	    }
+	    else 
+	    {
+		    $fileService = new FileService();
+		    $image_url = $fileService->getURL($file);
+	    }
         }
         else {
 	    $authService = new AuthService();
