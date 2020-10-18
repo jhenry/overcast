@@ -64,9 +64,11 @@ function getVideoThumbUrl(Video $video)
     $url = $config->thumbUrl . '/' . $video->filename . $extension;
 
     if( class_exists('CustomThumbs') ){
+        // Handle a possibly attached thumb
         $url = CustomThumbs::thumb_url($video->videoId);
     }
     else {
+	// Use the default ffmpeg generated thumb
         if (class_exists('Wowza')) {
             $thumb_dir = Wowza::get_url_by_video_id($video->videoId, 'thumbs');
             $url = $thumb_dir . $video->filename . $extension;
