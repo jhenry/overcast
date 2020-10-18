@@ -241,10 +241,10 @@ function buildLocalCaptionTracks(Video $video)
     $tracks = $urlPath = "";
     if (class_exists('Wowza')) {
         // Build local paths to look for existing caption files.
-        $h264Path = Settings::get('wowza_upload_dir') . Wowza::get_video_owner_homedir($videoId) . '/h264/'; 
+        $h264Path = Settings::get('wowza_upload_dir') . Wowza::get_video_owner_homedir($video->videoId) . '/h264/'; 
         $srtFile = $h264Path . $video->filename . '.srt';
         $vttFile = $h264Path . $video->filename . '.vtt';
-        $urlPath = Wowza::get_url_by_video_id($videoId, 'h264');
+        $urlPath = Wowza::get_url_by_video_id($video->videoId, 'h264');
         if (file_exists($srtFile)) {
             $srtUrl = $urlPath . $video->filename . '.srt';
             $tracks = buildCaptionTrack($srtUrl, $defaultLanguage, $default, $json);
