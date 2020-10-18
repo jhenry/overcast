@@ -23,7 +23,7 @@
             <?php foreach ($attachments as $attachment): ?>
                 <a
                     class="attachment"
-                    href="<?php echo $this->getService('File')->getUrl($attachment); ?>"
+                    href="<?= getAttachmentUrl($attachment);  ?>"
                     title="<?php echo htmlspecialchars($attachment->name); ?> (<?php echo \Functions::formatBytes($attachment->filesize, 0); ?>)"
                 >
                     <?php echo htmlspecialchars($attachment->name); ?> (<?php echo \Functions::formatBytes($attachment->filesize, 0); ?>)

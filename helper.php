@@ -282,6 +282,24 @@ function getMediaUrl(Video $video)
     return $url;
 	
 }
+/**
+ * Retrieves full URL to an attachment asset 
+ * @param Attachment $attachment The attachment object to retrieve the URL for
+ * @return string URL to the attachment 
+ */
+function getAttachmentUrl(File $file)
+{
+	$url = "";
+	if (class_exists('Wowza')) {
+		$base_url = Wowza::get_url_by_user_id($file->userId, 'attachments');
+		$url = $base_url . $file->filename . '.' . $file->extension;
+	}
+	else {
+		$fileService = new FileService();
+		$url = $fileService->getUrl($attachment);
+	}
+	return $url;
+}
 
 /**
  * Check for existence of SMIL file for this video.
@@ -379,9 +397,9 @@ function videoCardBlock($viewFile, $video)
 * Set url for temp directory in meta, to allow thumb display on upload.
 *
 */
-function getTempDirUrl() {
+function getTempDirUrl($user) {
     if (class_exists('Wowza')) {
-        $tempDir = Wowza::get_url_by_video_id($video->videoId, 'temp');
+        $tempDir = Wowza::get_url_by_user_id($user->userId, 'temp');
     } else {
         $tempDir = BASE_URL . '/cc-content/uploads/temp/';
     }
@@ -467,7 +485,9 @@ function attachmentIcon($fileId)
             $image_url = $fileService->getURL($file);
         }
         else {
-            $tempDir = getTempDirUrl();
+	    $authService = new AuthService();
+	    $loggedInUser = $authService->getAuthUser();
+            $tempDir = getTempDirUrl($loggedInUser);
             $image_url = $tempDir . $fileName;
         }
         $img = '<img class="playlist-mini-thumb" src="' . $image_url. '" alt="">';
