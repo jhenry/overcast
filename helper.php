@@ -66,6 +66,9 @@ function getVideoThumbUrl(Video $video)
     if( class_exists('CustomThumbs') ){
         // Handle a possibly attached thumb
         $url = CustomThumbs::thumb_url($video->videoId);
+        if (isAudio($video)) {
+            $url = str_replace('.jpg','.png',$url);
+        }
     }
     else {
 	// Use the default ffmpeg generated thumb
