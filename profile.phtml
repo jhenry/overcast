@@ -28,7 +28,7 @@ $col_width = 12 / $columns;
   <div class="row">
     <div class="col-md-8">
       <div class="media bg-white p-3 border">
-        <?php $avatar = $this->getService('User')->getAvatarUrl($member); ?>
+        <?php $avatar = getAvatar($member); ?>
         <?php if ($avatar) : ?>
           <img src="<?= $avatar; ?>" class="img-thumbnail" alt="">
         <?php else : ?>

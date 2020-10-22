@@ -26,7 +26,7 @@ $col_width = 12 / $columns;
           <?php foreach ($members as $member) : ?>
             <div class="col-md-<?= $col_width ?> member">
               <div class="media border bg-white p-3">
-                <?php $avatar = $userService->getAvatarUrl($member); ?>
+                <?php $avatar = getAvatar($member); ?>
                 <?php if ($avatar) : ?>
                   <img src="<?= $avatar; ?>" class="img-thumbnail" alt="">
                 <?php else : ?>
