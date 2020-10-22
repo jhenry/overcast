@@ -82,6 +82,26 @@ function getVideoThumbUrl(Video $video)
 }
 
 /**
+ * Get url for the specified user's avatar.
+ * @return null if no avatar was found for this user.
+ */
+function getAvatar($user)
+{
+	if (class_exists('Wowza')) {
+		if (!empty($user->avatar)) {
+			$url = Wowza::get_url_by_user_id($user->userId, 'avatars');	
+			$avatar = $url . $user->avatar; 
+		} else {
+			$avatar = null; 
+		} 
+	}
+	else {
+		$avatar = $this->getService('User')->getAvatarUrl($user);
+	}
+	return $avatar;
+}
+
+/**
  * Check for JWPlayer support
  * @return bool True if jwplayer is set in plugin settings
  */

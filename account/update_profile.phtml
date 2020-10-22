@@ -20,11 +20,13 @@ $this->SetLayout('account');
       <div class="form-row">
         <div class="form-group col-md-6">
           <label for="first-name"><?=Language::getText('first_name')?></label>
-          <input type="text" class="form-control <?=(isset ($Errors['first_name'])) ? ' is-invalid' : ''?>" name="first_name" id="first-name" placeholder="First Name" value="<?=htmlspecialchars($loggedInUser->firstName)?>">
+	<?php $firstName = $loggedInUser->firstName ?? ''; ?>
+          <input type="text" class="form-control <?=(isset ($Errors['first_name'])) ? ' is-invalid' : ''?>" name="first_name" id="first-name" placeholder="First Name" value="<?=htmlspecialchars($firstName)?>">
         </div>
         <div class="form-group col-md-6">
           <label for="last-name"><?=Language::getText('last_name')?></label>
-          <input type="text" class="form-control <?=(isset ($Errors['last_name'])) ? ' is-invalid' : ''?>" name="last_name" id="last-name" placeholder="Last Name" value="<?=htmlspecialchars($loggedInUser->lastName)?>">
+	<?php $lastName = $loggedInUser->lastName ?? ''; ?>
+          <input type="text" class="form-control <?=(isset ($Errors['last_name'])) ? ' is-invalid' : ''?>" name="last_name" id="last-name" placeholder="Last Name" value="<?=htmlspecialchars($lastName)?>">
         </div>
       </div>
       <div class="form-row">
@@ -34,13 +36,15 @@ $this->SetLayout('account');
         </div>
         <div class="form-group col-md-6">
           <label for="website"><?=Language::getText('website')?></label>
-          <input type="website" class="form-control <?=(isset ($Errors['website'])) ? ' is-invalid' : ''?>" name="website" id="website" placeholder="website" value="<?=htmlspecialchars($loggedInUser->website)?>">
+	<?php $website = $loggedInUser->website ?? ''; ?>
+          <input type="website" class="form-control <?=(isset ($Errors['website'])) ? ' is-invalid' : ''?>" name="website" id="website" placeholder="website" value="<?=htmlspecialchars($website)?>">
         </div>
       </div>
       <div class="form-row">
         <div class="form-group col">
           <label for="about-me"><?=Language::getText('about_me')?></label>
-          <textarea name="about"class="form-control" id="about" rows="3" cols="100"><?=htmlspecialchars($loggedInUser->about_me)?></textarea>
+	<?php $about_me = $loggedInUser->about_me ?? ''; ?>
+          <textarea name="about"class="form-control" id="about" rows="3" cols="100"><?=htmlspecialchars($about_me)?></textarea>
         </div>
       </div>
       <input type="hidden" value="yes" name="submitted" />
@@ -52,7 +56,7 @@ $this->SetLayout('account');
 <div class="row my-5">
   <div class="col">
     <h2 id="update_avatar"><?=Language::getText('update_avatar_header')?></h2>
-    <div class="message <?=$message_type?>"><?=$message?></div>
+	<?php ( isset($message) ) ? showAlertMessage($message, $message_type) : ''; ?>
   </div>
 </div>
 <div class="row">
@@ -60,7 +64,7 @@ $this->SetLayout('account');
     <div class="card mb-3">
       <div class="row no-gutters">
         <div class="col-md-4 pt-4">
-          <?php $avatar = $this->getService('User')->getAvatarUrl($loggedInUser); ?>
+          <?php $avatar = getAvatar($loggedInUser); ?>
           <p class="text-center py-4">
             <?php if($avatar): ?> 
             <img alt="<?php echo Language::getText('current_avatar'); ?>" src="<?=$avatar?>">
