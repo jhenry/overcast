@@ -1,8 +1,8 @@
-<?php $avatar = $this->getService('User')->getAvatarUrl($member); ?>
 <div class="card mb-3 border-top-0 rounded-0">
   <div class="row no-gutters">
     <div class="col-md-4 text-center">
-    <?php if($avatar): ?>
+    <?php $avatar = getAvatar($member); ?>
+    <?php if ($avatar) : ?>
         <img src="<?=$avatar;?>" class="p-2 my-3 img-thumbnail" alt="">
     <?php else: ?>
     <i class="fas fa-user fa-lg py-3 mt-3" alt="<?php echo Language::getText('current_avatar'); ?>" style="font-size: 64px;"></i>
