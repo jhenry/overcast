@@ -27,6 +27,7 @@
   <?php $this->writeCSS(); ?>
 
   <title><?= $meta->title ?></title>
+  <?php Plugin::triggerEvent('theme.head.bottom'); ?>
 </head>
 
 <body>
