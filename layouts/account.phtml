@@ -24,6 +24,7 @@
     <link href="<?=$this->options->themeUrl?>/css/vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
 
     <title><?=$meta->title?></title>
+    <?php Plugin::triggerEvent('theme.head.end'); ?>
   </head>
   <body>
     <?php Plugin::triggerEvent('theme.body'); ?>
