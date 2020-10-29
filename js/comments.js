@@ -100,17 +100,30 @@ class Comment {
     cardData.reportAbuseText = this.reportAbuseText
     cardData.datePosted = moment(cardData.comment.dateCreated).format('MM/DD/YYYY')
 
+
     const parentId = cardData.comment.parentId
     if (parentId !== 0) {
       const parentCard = $(`[data-comment="${parentId}"]`)
       cardData.indent = ' ' + this.getIndent(parentCard)
 
-      const renderedCard = template.render(cardData)
+      var renderedCard = template.render(cardData)
       parentCard.after(renderedCard)
     } else {
       const renderedCard = template.render(cardData)
       $('#comments-list-block').append(renderedCard)
     }
+
+    // Fix avatar url if it is stored in a different location.
+    const isWowza = $('meta[name=wowza]').attr("content")
+    if (typeof isWowza !== 'undefined') {
+      const url = cc.baseUrl + '/api/wowza/user/' + cardData.author.userId + '/avatars'
+      let callback = function (responseData) {
+        const avatar = cc.baseUrl + responseData
+        $('#comments-list-block').find('[data-comment="' + cardData.comment.commentId + '"]').find(".authorAvatar").attr("src", avatar)
+      }
+      $.get(url, callback)
+    }
+
   }
 
   // Apply indent class

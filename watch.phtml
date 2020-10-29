@@ -6,6 +6,10 @@ $this->addMeta('loggedIn', (bool) $loggedInUser);
 $this->addMeta('reply_to', Language::getText('reply_to'));
 $this->addMeta('report_abuse', Language::getText('report_abuse'));
 
+if (class_exists('Wowza')) {
+  $this->addMeta('wowza', 'true');
+}
+
 if ($loggedInUser && !$video->commentsClosed) {
     $this->addMeta('reply', Language::getText('reply'));
 }
