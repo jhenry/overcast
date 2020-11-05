@@ -258,7 +258,7 @@ function buildCaptionTrack($url, $language, $default, $json=true)
  * @param Video $video The video object the captions are attached to
  * @return string HTML/JSON for track listings 
  */
-function buildLocalCaptionTracks(Video $video)
+function buildLocalCaptionTracks(Video $video, $json=true)
 {
     // Set label for captions that don't have a language attached
     $defaultLanguage = Settings::get('default_language');
