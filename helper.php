@@ -567,3 +567,20 @@ function durationInWords($duration)
 
 
 }
+
+/**
+ * Get popular videos based on "views"
+ * @return array of video objects
+ *
+ **/
+function getPopularVideos()
+{
+  $query = "SELECT video_id FROM " . DB_PREFIX . "videos WHERE status = 'approved' AND private = '0' ORDER BY views DESC limit 6";
+  $db = Registry::get('db');
+  $result = $db->fetchAll($query);
+
+  $videoMapper = new VideoMapper();
+  $popular = $videoMapper->getVideosFromList(Functions::arrayColumn($result, 'video_id'));
+  return $popular;
+}
+

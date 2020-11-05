@@ -79,24 +79,30 @@
         <?php endif; ?>
 
     </div>
-      <div class="row">
-          <div class="col">
-            <h2>Popular Videos</h2>
-           </div>
-        </div>
 
-
+    <?php $popular_videos = getPopularVideos(); ?>
+    <?php if($popular_videos): ?>
+    <!-- Popular Start -->
     <div class="row">
-        <?php foreach (array_slice($recent_videos, 0, 3) as $recent_video): ?>
-
-        <div class="col-md-4">
-             <?php $this->repeatingBlock('video.phtml', array($recent_video)); ?>
-        </div>
-
-        <?php endforeach; ?>
+      <div class="col">
+        <h2>Popular Videos</h2>
+      </div>
     </div>
 
 
+    <div class="row">
+      <?php foreach (array_slice($popular_videos, 0, 3) as $popular_videos): ?>
+
+        <div class="col-md-4">
+          <?php $this->repeatingBlock('video.phtml', array($popular_videos)); ?>
+        </div>
+
+      <?php endforeach; ?>
+    </div>
+    <!-- Popular End -->
+    <?php endif; ?>
+
+    <!-- Recent Start -->
       <div class="row">
           <div class="col">
             <h2>Recent Videos</h2>
@@ -113,6 +119,16 @@
 
         <?php endforeach; ?>
     </div>
+    <div class="row">
+        <?php foreach (array_slice($recent_videos, 3, 3) as $more_recents): ?>
+
+        <div class="col-md-4">
+             <?php $this->repeatingBlock('video.phtml', array($more_recents)); ?>
+        </div>
+
+        <?php endforeach; ?>
+    </div>
+    <!-- Recent End -->
 
     </div>
 </div>
