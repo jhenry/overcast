@@ -94,6 +94,7 @@ $this->setLayout('account');
           <div id="video-attachments">
             <?php if ($config->allowVideoAttachments) : ?>
               <h4 class="text-white bg-secondary p-2" id="video-attachments"><?php echo Language::getText('video_attachments_tab_header'); ?></h4>
+              <p class="video-attachments-tab-desc">Uploaded attachments can be set as captions and custom thumbnails.</p>
               <ul class="attachments list-group">
                 <?php $attachmentCount = 0; ?>
                 <?php foreach ($newFiles as $newFile) : ?>
