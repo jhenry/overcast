@@ -43,7 +43,7 @@ $video_rows = array_chunk($userVideos, $columns);
 
               <p class="card-text mb-0"><strong><a href="<?= $this->getService('Video')->getUrl($video) ?>/"><?= htmlspecialchars($video->title) ?></a></strong>
               </p>
-              <p class="card-text"><?= $video->description ?></p>
+              <p class="card-text"><?= htmlspecialchars(mb_strimwidth($video->description, 0, 200, '...')) ?></p>
 
             </div>
             <div class="card-footer button-actions text-right">
