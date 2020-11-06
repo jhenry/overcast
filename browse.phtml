@@ -35,7 +35,7 @@ $col_width = 12 / $columns;
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link py-1 dropdown-toggle<?= (isset($_GET['category'])) ? ' active' : '' ?>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Category</a>
-            <div class="dropdown-menu">
+            <div class="dropdown-menu explore-categories">
               <?php foreach ($category_list as $category) : ?>
                 <a class="dropdown-item<?= (isset($_GET['category']) && ( $_GET['category'] == $category->slug )) ? ' active' : '' ?>" href="<?= BASE_URL ?>/browse/<?= $category->slug ?>/" title="<?= $category->name ?>"><?= $category->name ?></a>
               <?php endforeach; ?>

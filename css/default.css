@@ -104,3 +104,8 @@
 	width:200px;
 	display: inline-block;
 }
+
+.dropdown-menu.explore-categories {
+overflow: scroll;
+height: 300px;
+}
