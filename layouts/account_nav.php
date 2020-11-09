@@ -20,7 +20,10 @@
                 <ul class="nav flex-column">
                     <li class="nav-item"><a href="<?php echo HOST; ?>/account/profile/" class="nav-link"><?=Language::GetText('update_profile')?></a></li>
                     <li class="nav-item"><a href="<?php echo HOST; ?>/account/privacy-settings/" class="nav-link"><?=Language::GetText('privacy_settings')?></a></li>
+
+              <?php if (!class_exists('AuthCAS')): ?>
                     <li class="nav-item"><a href="<?php echo HOST; ?>/account/change-password/" class="nav-link"><?=Language::GetText('change_password')?></a></li>
+              <?php endif; ?>
                 </ul>
             </div>
 
