@@ -42,6 +42,11 @@ $col_width = 12 / $columns;
           <?php endforeach; ?>
         </div>
       <?php endforeach; ?>
+      <div class="row mt-5">
+        <div class="col">
+          <?= $pagination->Paginate(); ?>
+        </div>
+      </div>
     <?php else : ?>
       <p class="alert alert-info p-4"><?= Language::GetText('no_members') ?></p>
     <?php endif; ?>
