@@ -96,7 +96,8 @@ function getAvatar($user)
 		} 
 	}
 	else {
-		$avatar = $this->getService('User')->getAvatarUrl($user);
+    $userService = new UserService();
+		$avatar = $userService->getAvatarUrl($user);
 	}
 	return $avatar;
 }
