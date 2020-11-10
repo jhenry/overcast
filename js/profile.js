@@ -49,17 +49,27 @@ class Profile {
     const videoRows = this.chunker(videoList, columns)
     for (const videos of videoRows) {
       const row = $('<div class="row pt-4"></div>')
-      for (let video of videos) {
-        video = this.loadVideoMeta(video);
-        const col = $('<div class="col-md-' + columnWidth + ' video"></div>')
-        const template = $.templates('#video-card-template')
-        const renderedCard = template.render(video)
+        for (let video of videos) {
+          video = this.loadVideoMeta(video);
+          const col = $('<div id="video-' + video.videoId  + '" class="col-md-' + columnWidth + ' video"></div>')
+            const template = $.templates('#video-card-template')
+            const renderedCard = template.render(video)
 
-        col.append(renderedCard)
-        row.append(col)
-        $('#videos_list').append(row)
-      }
+            col.append(renderedCard)
+            row.append(col)
+            $('#videos_list').append(row)
 
+            const isWowza = $('meta[name=wowza]').attr("content")
+            if (typeof isWowza !== 'undefined') {
+              const url = cc.baseUrl + '/api/wowza/video/' + video.videoId + '/thumbs'
+                let callback = function (responseData) {
+                  const thumb = cc.baseUrl + responseData
+                    $('#video-' + video.videoId).find('.video-card-thumb').attr("src", thumb)
+                }
+              $.get(url, callback)
+            }
+
+        }
     }
   }
 

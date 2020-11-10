@@ -6,6 +6,10 @@ $this->addMeta('videoCount', $videoCount);
 $this->addMeta('playlistCount', $playlistCount);
 $this->addMeta('thumbUrl', $config->thumbUrl);
 
+if (class_exists('Wowza')) {
+  $this->addMeta('wowza', 'true');
+}
+
 if (!empty($watchLaterPlaylistId)) $this->addMeta('watchLaterPlaylistId', $watchLaterPlaylistId);
 
 $this->addJs($this->options->themeUrl . '/js/vendor/moment.min.js');
