@@ -77,7 +77,7 @@ $this->setLayout('account');
                     </p>
                   </div>
                 </div>
-                <?php Plugin::triggerEvent('account.upload.info.private.setting'); ?>
+                <?= Language::getText('upload_info_privacy_end') ?>
               </li>
               <li class="list-group-item">
                 <div class="custom-control custom-switch">
@@ -94,7 +94,7 @@ $this->setLayout('account');
           <div id="video-attachments">
             <?php if ($config->allowVideoAttachments) : ?>
               <h4 class="text-white bg-secondary p-2" id="video-attachments"><?php echo Language::getText('video_attachments_tab_header'); ?></h4>
-              <p class="video-attachments-tab-desc">Uploaded attachments can be set as captions and custom thumbnails.</p>
+              <p class="video-attachments-tab-desc"><?php echo Language::getText('video_attachments_tab_help'); ?></p>
               <ul class="attachments list-group">
                 <?php $attachmentCount = 0; ?>
                 <?php foreach ($newFiles as $newFile) : ?>
