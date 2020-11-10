@@ -108,6 +108,9 @@ cumulusClips.uploaderOptions = {
         $uploadWidget.find('.progress-bar').css('width', '0%').attr('aria-valuenow','0');;
         $uploadWidget.find('.progress-bar').text('0%');
 
+        $uploadWidget.find('.progress').parent().removeClass('pt-2');
+        $uploadWidget.find('.progress').attr('style', 'height: 31px;');
+
         // Set upload filename
         var displayFilename = (selectedFile.name.length > 35)
             ? selectedFile.name.substring(0, 35) + '...'
