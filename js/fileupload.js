@@ -106,6 +106,7 @@ cumulusClips.uploaderOptions = {
         // Prepare upload progress box
         $uploadWidget.find('.upload-progress').removeClass('d-none');
         $uploadWidget.find('.progress-bar').css('width', '0%').attr('aria-valuenow','0');;
+        $uploadWidget.find('.progress-bar').text('0%');
 
         // Set upload filename
         var displayFilename = (selectedFile.name.length > 35)
@@ -133,6 +134,7 @@ cumulusClips.uploaderOptions = {
 
         // Update progress bar
         $uploadWidget.find('.progress-bar').css('width', progress + '%').attr('aria-valuenow', progress);
+        $uploadWidget.find('.progress-bar').text(progress + '%');
     },
     fail: function(event, data)
     {
