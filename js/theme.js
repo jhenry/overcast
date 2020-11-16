@@ -161,6 +161,18 @@ var cc = {
   },
 
   /**
+   * Toggle visibility of the warning/text that appears when a video is set to public
+   */
+  togglePublicVidWarning: function () {
+    if($("#private_video").is(':checked')) {
+      $("#public-warning").hide();  
+    }
+    else {
+      $("#public-warning").show(); 
+    }
+  },
+
+  /**
    * Create and add a new playlist to the "dropdown" button on the watch page.
    * TODO: move to jsrender/template.
    * @param createPlaylistResponse response from server with status, etc.
@@ -286,3 +298,14 @@ $('.btn-clipboard').tooltip({
 $('.watch-later-mini').tooltip({ placement: 'bottom' })
 
 $(".temp-custom-thumb").tooltip()
+
+$("#private_video").click(function() {
+    cc.togglePublicVidWarning()
+});
+
+$(function () {
+    cc.togglePublicVidWarning()
+})
+
+
+
