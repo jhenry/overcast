@@ -1,5 +1,5 @@
 <header>
-  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+  <nav class="top-nav navbar navbar-expand-md navbar-dark fixed-top bg-dark">
   <?php
     $navBarBranding = '<a class="navbar-brand" href="' . BASE_URL . '/"><i class="fas fa-cloud cc-icon"></i> ' . $config->sitename . '</a>';
     $navBarBranding = Plugin::triggerFilter('header.navbar.branding', $navBarBranding);
@@ -46,7 +46,7 @@
         <?= Language::GetText('top_nav_left_end') ?>
 
       </ul>
-      <form class="form-inline mt-2 mt-md-0" action="<?= BASE_URL ?>/search/" method="post">
+      <form class="nav-search form-inline mt-2 mt-md-0" action="<?= BASE_URL ?>/search/" method="post">
         <input class="form-control mr-sm-2" type="text" name="keyword" placeholder="Search" aria-label="Search">
         <input type="hidden" name="submitted_search" value="TRUE" />
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>

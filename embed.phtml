@@ -63,8 +63,9 @@
     <?php endif; ?>
 
     <?php if ($loginNeeded) : ?>
+    <?php $redirect = ($video->private) ? $video->privateUrl : $video->videoId; ?>
       <div class="video-unavailable gated">
-        <p><a href="<?= BASE_URL . '/login' ?>"><?= Language::getText('gated_video'); ?></a></p>
+        <p><a href="<?= BASE_URL . '/login?r=embed/'. $redirect ?>"><?= Language::getText('gated_video'); ?></a></p>
       </div>
     <?php endif; ?>
 
