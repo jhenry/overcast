@@ -56,12 +56,12 @@
 <div class="album bg-light">
     <div class="container">
 
-      <div class="row">
+      <div class="row featured-head">
           <div class="col">
             <h2>Featured Videos</h2>
            </div>
         </div>
-      <div class="row">
+      <div class="row feature-cards">
     <?php if($featured_videos): ?>
 	<?php $more_features = array_slice($featured, 3, 3);?>
         <?php foreach ($more_features as $featuredVideo): ?>
@@ -83,14 +83,14 @@
     <?php $popular_videos = getPopularVideos(); ?>
     <?php if($popular_videos): ?>
     <!-- Popular Start -->
-    <div class="row">
+    <div class="row popular-head">
       <div class="col">
         <h2>Popular Videos</h2>
       </div>
     </div>
 
 
-    <div class="row">
+    <div class="row popular-cards">
       <?php foreach (array_slice($popular_videos, 0, 3) as $popular_videos): ?>
 
         <div class="col-md-4">
@@ -103,14 +103,14 @@
     <?php endif; ?>
 
     <!-- Recent Start -->
-      <div class="row">
+      <div class="row recent-head">
           <div class="col">
             <h2>Recent Videos</h2>
            </div>
         </div>
 
 
-    <div class="row">
+    <div class="row recent-cards">
         <?php foreach (array_slice($recent_videos, 0, 3) as $recent_video): ?>
 
         <div class="col-md-4">
@@ -119,7 +119,7 @@
 
         <?php endforeach; ?>
     </div>
-    <div class="row">
+    <div class="row recent-cards">
         <?php foreach (array_slice($recent_videos, 3, 3) as $more_recents): ?>
 
         <div class="col-md-4">
