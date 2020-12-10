@@ -23,7 +23,8 @@
     <!-- Font Awesome -->
     <link href="<?=$this->options->themeUrl?>/css/vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
 
-    <title><?=$meta->title?></title>
+    <title><?= $config->sitename ?></title>
+    <?php $this->writeCSS(); ?>
     <?php Plugin::triggerEvent('theme.head.end'); ?>
   </head>
   <body>
