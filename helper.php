@@ -125,9 +125,11 @@ function countViewsAndPlays($video)
 {
     $plays = 0;
     if (class_exists('Stats')) {
-        $plays = Stats::countPlays($video);
+      $total = Stats::countPlays($video);
     }
-    $total = (int) $plays + (int) $video->views;
+    else{
+      $total = (int) $video->views;
+    }
     return $total;
 }
 
