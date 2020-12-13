@@ -296,6 +296,7 @@ $('.btn-clipboard').tooltip({
 })
 
 $('.watch-later-mini').tooltip({ placement: 'bottom' })
+$('.actions .btn-toolbar .btn').tooltip({ placement: 'bottom' })
 
 $(".temp-custom-thumb").tooltip()
 
@@ -306,6 +307,4 @@ $("#private_video").click(function() {
 $(function () {
     cc.togglePublicVidWarning()
 })
-
-
 

@@ -72,10 +72,24 @@ $this->addJs($this->options->themeUrl . '/js/last.js');
                 "tracks":  [<?= getCaptionTracks($video, true); ?>]
 			}]
             });
-		</script>
+                        </script>
                         <?php Plugin::triggerEvent('videos.watch.player.end', $mediaspace, $video); ?>
-                    <?php else : ?>
-                        <video class="video-js vjs-big-play-centered" controls preload="auto" data-setup='{ "autoplay": false, "fluid": true, "aspectRatio": "16:9", "playbackRates": [0.5, 1, 1.5, 2, 2.5]}' poster="<?= getVideoThumbUrl($video) ?>">
+                        <script>
+                          const buttonId = 'theater-mode-button';
+                          const iconPath = '<?= $this->options->themeUrl ?>/assets/theater-mode.svg';
+                          const tooltipText = 'Theater Mode';
+
+                          // Call the player's `addButton` API method to add the custom button
+                          player<?= $mediaspace; ?>.addButton(iconPath, tooltipText, toggleTheaterMode, buttonId);
+                          // Toggle theater mode on/off
+                          function toggleTheaterMode() {
+                            // Toggle the column width (in this case swapping bootstrap columns)
+                            $("#video-col").toggleClass('col-md-8')
+                            $("#video-col").toggleClass('col-md-12')
+                          }
+                          </script>
+                      <?php else : ?>
+                          <video class="video-js vjs-big-play-centered" controls preload="auto" data-setup='{ "autoplay": false, "fluid": true, "aspectRatio": "16:9", "playbackRates": [0.5, 1, 1.5, 2, 2.5]}' poster="<?= getVideoThumbUrl($video) ?>">
                             <?php if (smilFileExists($video)) : ?>
                                 <source src="<?= getMediaUrl($video) ?>" type="video/mp4" />
                             <?php else : ?>
@@ -107,9 +121,9 @@ $this->addJs($this->options->themeUrl . '/js/last.js');
                     <div class="btn-toolbar float-right" role="toolbar" aria-label="Video actions.">
                         <div class="btn-group mr-2" role="group" aria-label="Like/Rating buttons.">
                             <?php if (isRated($video, $loggedInUser)) : ?>
-                                <a id="liked" class="like rating btn btn-sm btn-outline-primary disabled" href="#" data-rating="0" data-video_id=<?= $video->videoId; ?> role="button"><i class="fas fa-heart like-icon" alt="Click to like this video."></i> <span class="likes badge badge-light"><?= $rating->likes ?></span> <span class="sr-only"> likes for this video.</span> </a>
+                                <a id="liked" class="like rating btn btn-sm btn-outline-primary disabled" href="#" data-rating="0" data-video_id=<?= $video->videoId; ?> data-toggle="tooltip" title="You Liked This" role="button"><i class="fas fa-heart like-icon" alt="Click to like this video."></i> <span class="likes badge badge-light"><?= $rating->likes ?></span> <span class="sr-only"> likes for this video.</span> </a>
                             <?php else : ?>
-                                <a id="like" class="like rating btn btn-sm btn-outline-primary" href="" data-rating="1" data-video_id=<?= $video->videoId; ?> role="button"><i class="far fa-heart like-icon" alt="Click to like this video."></i> <span class="likes badge badge-light"><?= $rating->likes ?></span> <span class="sr-only"> likes for this video.</span> </a>
+                                <a id="like" class="like rating btn btn-sm btn-outline-primary" href="" data-rating="1" data-video_id=<?= $video->videoId; ?> data-toggle="tooltip" title="Like This" role="button"><i class="far fa-heart like-icon" alt="Click to like this video."></i> <span class="likes badge badge-light"><?= $rating->likes ?></span> <span class="sr-only"> likes for this video.</span> </a>
                             <?php endif; ?>
                         </div>
                         <?php if ($loggedInUser) : ?>
