@@ -68,6 +68,12 @@ function getVideoThumbUrl(Video $video)
         $url = CustomThumbs::thumb_url($video->videoId);
         if (isAudio($video)) {
             $url = str_replace('.jpg','.png',$url);
+
+            // Fix broken/missing audio icon if one wasn't added during upload.
+            if (!urlExists($url)) {
+              $themeUrl = BASE_URL . '/cc-content/themes/' . Settings::get('active_theme');
+              $url = $themeUrl . '/assets/file-audio-regular.png';
+            }
         }
     }
     else {
@@ -585,5 +591,15 @@ function getPopularVideos()
   $videoMapper = new VideoMapper();
   $popular = $videoMapper->getVideosFromList(Functions::arrayColumn($result, 'video_id'));
   return $popular;
+}
+
+/**
+ * Check to see if a url exists by looking at the headers
+ * @return bool true if the file exists, else false
+ *
+ **/
+function urlExists($url){
+   $headers = get_headers($url);
+   return stripos($headers[0], "200 OK") ? true : false;
 }
 

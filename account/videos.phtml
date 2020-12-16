@@ -22,7 +22,7 @@ $video_rows = array_chunk($userVideos, $columns);
             <a class="card-thumb-link" href="<?= $this->getService('Video')->getUrl($video) ?>/">
               <div class="video-card-img-container d-flex bg-dark justify-content-center mr-2">
                 <?php if (isVideoPending($video->status)) : ?>
-                  <p class="text-center">
+                  <p class="text-center pending-processing">
                     <i class="far fa-file-video text-center py-5" style="font-size: 128px;" alt="<?= Language::getText($video->status) ?>"></i>
                     <br> <span class="h5"><?= Language::getText($video->status) ?></span>
                   </p>
