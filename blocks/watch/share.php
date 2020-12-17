@@ -12,10 +12,11 @@
 						</div>
 					</div>
 					<?php if (!$video->disableEmbed) : ?>
+					<?php $embedUrlFragment =  ($video->private) ? $video->privateUrl : $video->videoId; ?>
 					<h5 class="mt-3">iFrame Embed</h5>
 					<div class="form-group">
 						<label for="embedCode"><?= Language::getText('embed_text') ?></label>
-						<textarea id="embedCode" class="form-control" rows="4">&lt;iframe src="<?= BASE_URL ?>/embed/<?= $video->videoId ?>/" width="640" height="480" frameborder="0" allowfullscreen&gt;&lt;/iframe&gt;</textarea>
+						<textarea id="embedCode" class="form-control" rows="4">&lt;iframe src="<?= BASE_URL ?>/embed/<?= $embedUrlFragment ?>/" width="640" height="480" frameborder="0" allowfullscreen&gt;&lt;/iframe&gt;</textarea>
 						<div class="text-right">
 							<button type="button" class="btn btn-sm btn-outline-primary btn-clipboard mt-2" data-clipboard-target="#embedCode">Copy to Clipboard</button>
 						</div>
@@ -23,7 +24,7 @@
 					<h5>Auto-Embed Link</h5>
 					<div class="input-group">
 						<label for="autoEmbedCode">To embed this video on <strong>wordpress and similar sites</strong>, copy and paste this link to auto-embed.</label>
-						<input id="autoEmbedCode" type="text" class="form-control" value="<?= BASE_URL ?>/embed/<?= $video->videoId ?>/" maxlength="130">
+						<input id="autoEmbedCode" type="text" class="form-control" value="<?= BASE_URL ?>/embed/<?= $embedUrlFragment ?>/" maxlength="130">
 						<div class="input-group-append">
 							<button class="btn btn-outline-primary btn-clipboard" data-clipboard-target="#autoEmbedCode" type="button">Copy</button>
 						</div>
