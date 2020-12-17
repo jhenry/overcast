@@ -599,7 +599,12 @@ function getPopularVideos()
  *
  **/
 function urlExists($url){
-   $headers = get_headers($url);
-   return stripos($headers[0], "200 OK") ? true : false;
+   $headers = @get_headers($url);
+   if($headers) {
+     return stripos($headers[0], "200 OK") ? true : false;
+   }
+   else {
+     return false;
+   }
 }
 
