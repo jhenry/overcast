@@ -11,7 +11,7 @@ $col_width = 12 / $columns ;
     <?php ( isset($message) ) ? showAlertMessage($message, $message_type) : ''; ?>
   </div>
 </div>
-<div class="row">
+<div class="row playlist-cards">
 	<!-- Begin Favorites -->
 	<div class="col-md-4 mb-4">
 		<div class="card">
@@ -91,7 +91,7 @@ $col_width = 12 / $columns ;
 <?php if (count($userPlaylists) > 0): ?>
 <?php $playlist_rows = array_chunk($userPlaylists, $columns); ?>
 <?php foreach ($playlist_rows as $playlists): ?>
-<div class="row">
+<div class="row playlist-cards">
     <?php foreach ($playlists as $playlist): ?>
       <div class="col-md-<?= $col_width ?> video mb-4">
 		<div class="card">
