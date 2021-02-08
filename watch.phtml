@@ -119,11 +119,13 @@ $this->addJs($this->options->themeUrl . '/js/last.js');
                 </div>
                 <div class="col-md-6">
                     <div class="btn-toolbar float-right" role="toolbar" aria-label="Video actions.">
+                      <?php if ($loggedInUser) : ?>
                         <?php if ($video->userId == $loggedInUser->userId) : ?>
                         <div class="btn-group mr-2" role="group" aria-label="Edit button.">
                           <a class="btn btn-sm btn-outline-primary" href="<?= BASE_URL ?>/account/videos/edit/<?= $video->videoId ?>/"><?= Language::getText('edit_video') ?></a>
                         </div>
                         <?php endif; ?>
+                      <?php endif; ?>
                         <div class="btn-group mr-2" role="group" aria-label="Like/Rating buttons.">
                             <?php if (isRated($video, $loggedInUser)) : ?>
                                 <a id="liked" class="like rating btn btn-sm btn-outline-primary disabled" href="#" data-rating="0" data-video_id=<?= $video->videoId; ?> data-toggle="tooltip" title="You Liked This" role="button"><i class="fas fa-heart like-icon" alt="Click to like this video."></i> <span class="likes badge badge-light"><?= $rating->likes ?></span> <span class="sr-only"> likes for this video.</span> </a>
