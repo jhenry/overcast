@@ -17,6 +17,8 @@
     </div>
     <ul class="list-unstyled mb-0">
       <?php $videoService = $this->getService('Video'); ?>
+      <?php $playlistVideos = sortPlaylist($playlistVideos); ?>
+
       <?php foreach ($playlistVideos as $playlistVideo) : ?>
 
         <?php

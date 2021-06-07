@@ -557,6 +557,18 @@ function isVideoPending($status)
 }
 
 
+/**
+ * Sort array of video objects alphanumericly
+ * @param array $playlistVideos a playlist containing video objects
+ * @return array $sortedPlaylist a sorted playlist 
+ *
+ **/
+function sortPlaylist($playlistVideos)
+{
+    usort($playlistVideos, function($a, $b) {return strcmp($a->title, $b->title);}); 
+    return $playlistVideos;
+}
+
 function isInPlaylist($video, $playlist)
 {
 	$playlistService = new PlaylistService();
