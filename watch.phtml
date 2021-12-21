@@ -66,7 +66,6 @@ $this->addJs($this->options->themeUrl . '/js/last.js');
 
                             var player<?= $mediaspace; ?> = jwplayer("jwplayer<?= $mediaspace; ?>").setup({ 
 			"playlist": [{
-				"mediaid": "<?= $mediaid; ?>",
 				"image": "<?= getVideoThumbUrl($video) ?>",
                 "sources": [<?= getSmilSources($video, true); ?>],
                 "tracks":  [<?= getCaptionTracks($video, true); ?>]

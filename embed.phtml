@@ -84,7 +84,6 @@ html, body, .video-unavailable, video,  .video-js {
           <script>
             var player<?= $mediaspace; ?> = jwplayer("jwplayer<?= $mediaspace; ?>").setup({
               "playlist": [{
-                "mediaid": "<?= $mediaid; ?>",
                 "image": "<?= getVideoThumbUrl($video) ?>",
                 "sources": [<?= getSmilSources($video, true); ?>],
                 "tracks": [<?= getCaptionTracks($video, true); ?>]
