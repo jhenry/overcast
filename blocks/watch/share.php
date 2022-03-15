@@ -16,7 +16,7 @@
 					<h5 class="mt-3">iFrame Embed</h5>
 					<div class="form-group">
 						<label for="embedCode"><?= Language::getText('embed_text') ?></label>
-						<textarea id="embedCode" class="form-control" rows="4">&lt;iframe src="<?= BASE_URL ?>/embed/<?= $embedUrlFragment ?>/" width="640" height="480" frameborder="0" allowfullscreen&gt;&lt;/iframe&gt;</textarea>
+						<textarea id="embedCode" class="form-control" rows="4">&lt;iframe src="<?= BASE_URL ?>/embed/<?= $embedUrlFragment ?>/" width="560" height="315" frameborder="0" allowfullscreen&gt;&lt;/iframe&gt;</textarea>
 						<div class="text-right">
 							<button type="button" class="btn btn-sm btn-outline-primary btn-clipboard mt-2" data-clipboard-target="#embedCode">Copy to Clipboard</button>
 						</div>
