@@ -11,7 +11,7 @@
     "jquery": "^3.5.0",
     "jquery-ui-dist": "^1.12.1",
     "jsrender": "^1.0.5",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "popper.js": "^1.16.0",
     "video.js": "^7.6.5",
     "videojs-theater-mode": "^1.0.0"
