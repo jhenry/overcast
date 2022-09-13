@@ -2,11 +2,16 @@
   <div class="row mt-4 justify-content-center">
     <div class="col-md-6">
       <h1><?= Language::GetText('contact_header') ?></h1>
+      <?php if($loggedInUser): ?>
       <p><?= Language::GetText('contact_text') ?></p>
       <?php (isset($message)) ? showAlertMessage($message, $messageType) : ''; ?>
+      <?php else: ?>
+      <p>Please log in using the link above to submit a request.</p>
+      <?php endif; ?>
     </div>
   </div>
 
+  <?php if($loggedInUser): ?>
   <div class="row justify-content-center">
     <div class="col-md-6">
       <form action="<?= HOST ?>/contact/" method="post">
@@ -29,4 +34,6 @@
       </form>
     </div>
   </div>
+
+      <?php endif; ?>
 </div>
