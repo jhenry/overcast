@@ -42,14 +42,15 @@ $this->addJs($this->options->themeUrl . '/js/last.js');
             </div>
             <?php if ($video->gated && !$loggedInUser) : ?>
                 <div id="player-gated">
-                    <img width="100%" height="auto" src="<?= getVideoThumbUrl($video) ?>" alt="<?= htmlspecialchars($video->title); ?>" />
                     <div>
-                        <p><?= Language::getText('gated_video') ?></p>
-                        <a href="<?= HOST ?>/login/?redirect=<?= urlencode($this->getService('Video')->getUrl($video)) ?>" class="button_small"><?= Language::getText('login') ?></a>
+                        <p class="alert alert-warning text-center"><strong><?= Language::getText('gated_video') ?></strong>
+                        <br /><br /><a href="<?= HOST ?>/login/?redirect=<?= urlencode($this->getService('Video')->getUrl($video)) ?>" class="button_small btn-lg btn-primary"><?= Language::getText('login') ?></a>
                         <?php if ($config->enableRegistrations) : ?>
-                            <a href="<?= HOST ?>/register/" class="button_small"><?= Language::getText('register') ?></a>
+                            <a href="<?= HOST ?>/register/" class="button_small btn-lg btn-primary"><?= Language::getText('register') ?></a>
                         <?php endif; ?>
+                        </p>
                     </div>
+                    <img width="100%" height="auto" style="opacity: .2;" src="<?= getVideoThumbUrl($video) ?>" alt="<?= htmlspecialchars($video->title); ?>" />
                 </div>
 
             <?php else : ?>
