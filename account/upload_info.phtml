@@ -1,9 +1,9 @@
 <?php
 $this->addJs($this->options->themeUrl . '/js/vendor/jquery.iframe-transport.js');
 $this->addJs($this->options->themeUrl . '/js/vendor/jquery.fileupload.js');
-$this->addMeta('allowedImageFormats', implode($config->acceptedImageFormats, ','));
+$this->addMeta('allowedImageFormats', implode(',', $config->acceptedImageFormats));
 if (class_exists('AttachCaptions')) {
-  $this->addMeta('allowedCaptionFormats', implode($config->acceptedCaptionFormats, ','));
+  $this->addMeta('allowedCaptionFormats', implode(',', $config->acceptedCaptionFormats));
 }
 $this->addMeta('tempDirUrl', getTempDirUrl($loggedInUser));
 $this->addJs($this->options->themeUrl . '/js/vendor/jsrender.min.js');
