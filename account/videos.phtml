@@ -35,6 +35,9 @@ $video_rows = array_chunk($userVideos, $columns);
                 <?php endif; ?>
             </a>
             <div class="card-header">
+              <div class="float-left">
+                <?php Plugin::triggerEvent('videos.cardheader.left', $video); ?>
+              </div>
               <div class="float-right">
                 <?php include $this->getFallbackPath("blocks/playlist-buttons.phtml"); ?>
               </div>
