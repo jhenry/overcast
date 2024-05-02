@@ -43,8 +43,8 @@ $this->SetLayout('account');
       <div class="form-row">
         <div class="form-group col">
           <label for="about-me"><?=Language::getText('about_me')?></label>
-	<?php $about_me = $loggedInUser->about_me ?? ''; ?>
-          <textarea name="about"class="form-control" id="about" rows="3" cols="100"><?=htmlspecialchars($about_me)?></textarea>
+	<?php $about_me = $loggedInUser->aboutMe ?? ''; ?>
+          <textarea name="about_me"class="form-control" id="about" rows="3" cols="100"><?=htmlspecialchars($about_me)?></textarea>
         </div>
       </div>
       <input type="hidden" value="yes" name="submitted" />
