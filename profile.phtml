@@ -46,7 +46,7 @@ $col_width = 12 / $columns;
             <li class="list-group-item"><?= Language::GetText('subscribers') ?>:</strong>&nbsp; <?php echo $sub_count; ?></li>
             <?php if (!empty($member->website)) : ?>
               <li class="list-group-item"><?= Language::GetText('website') ?>: <a href="<?= $member->website ?>" target="_blank" rel="nofollow"><?= Functions::CutOff($member->website, 40); ?></a></li>
-              <p><?php echo nl2br(htmlspecialchars($member->aboutMe)); ?></p>
+              <p><?php echo nl2br(htmlspecialchars($member->aboutMe ?? "")); ?></p>
             <?php endif; ?>
             <?php if (!empty($member->aboutMe)) : ?>
               <li class="list-group-item"><?php echo nl2br(htmlspecialchars($member->aboutMe)); ?></li>
