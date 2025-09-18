@@ -43,7 +43,7 @@ $col_width = 12 / $columns;
             <li class="list-group-item h4"><?= $member->username ?></li>
             <li class="list-group-item"><?= Language::GetText('joined') ?>: <?= date('m/d/Y', strtotime($member->dateCreated)) ?></li>
             <li class="list-group-item"><?= Language::GetText('profile_views') ?>:</strong>&nbsp; <?= $member->views ?></li>
-            <li class="list-group-item"><?= Language::GetText('subscribers') ?>:</strong>&nbsp; <?php echo $sub_count[0]; ?></li>
+            <li class="list-group-item"><?= Language::GetText('subscribers') ?>:</strong>&nbsp; <?php echo $sub_count; ?></li>
             <?php if (!empty($member->website)) : ?>
               <li class="list-group-item"><?= Language::GetText('website') ?>: <a href="<?= $member->website ?>" target="_blank" rel="nofollow"><?= Functions::CutOff($member->website, 40); ?></a></li>
               <p><?php echo nl2br(htmlspecialchars($member->aboutMe)); ?></p>
