@@ -21,11 +21,11 @@ $this->SetLayout('account');
   </div>
   <div class="form-group">
     <label class="<?=(isset($errors['subject'])) ? 'is-invalid' : ''?>" for="subject"><?=Language::GetText('subject')?></label>
-    <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" value="<?=htmlspecialchars($subject)?>">
+    <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" value="<?=htmlspecialchars($subject ?? "")?>">
   </div>
 <div class="form-group">
     <label class="<?=(isset($errors['msg'])) ? 'is-invalid' : ''?>" for="message"><?=Language::GetText('message')?></label>
-    <textarea class="form-control" id="message" name="message" rows="3"><?=htmlspecialchars($msg)?></textarea>
+    <textarea class="form-control" id="message" name="message" rows="3"><?=htmlspecialchars($msg ?? "")?></textarea>
   </div>
   <input type="hidden" name="submitted" value="TRUE">
   <input type="hidden" name="nonce" value="<?php echo $formNonce; ?>">
